@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Suprava Dutta · Line Map (demo A)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #f7f6f2;
+    --paper-2: #ecebe5;
+    --paper-3: #d9d7cf;
+    --ink: #1a120c;
+    --ink-2: #5b4a3d;
+    --saffron: #e46000;
+    --rust: #9d4505;
+    --ochre: #b07800;
+    --graphite: #4a4549;
+    --brass: #ddba78;
+    --brass-deep: #a9832f;
+    --radius: 14px;
+    --font: "Overpass", ui-sans-serif, sans-serif;
+    --ease-out: cubic-bezier(.16, 1, .3, 1);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 17px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    font-variant-numeric: tabular-nums;
+  }
+  ::selection { background: var(--saffron); color: var(--paper); }
+  :focus-visible { outline: 3px solid var(--saffron); outline-offset: 3px; border-radius: 6px; }
+  a { color: inherit; text-underline-offset: .22em; text-decoration-thickness: 1.5px; }
+  html { scrollbar-color: var(--rust) var(--paper-2); }
+  img { display: block; max-width: 100%; }
+  .wrap { width: min(1200px, 100% - 40px); margin-inline: auto; }
+  .icon { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+  /* ---------- Liquid glass: a real material, used for the lens, the header and popovers ---------- */
+  .glass {
+    background: linear-gradient(180deg, rgb(255 255 255 / .62), rgb(255 255 255 / .30));
+    -webkit-backdrop-filter: blur(18px) saturate(1.7);
+    backdrop-filter: blur(18px) saturate(1.7);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / .95),
+      inset 0 -1px 1px rgb(255 255 255 / .4),
+      inset 0 0 0 1px rgb(255 255 255 / .35),
+      0 14px 30px -14px rgb(70 32 6 / .38);
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .glass { background: var(--paper-2); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  }
+
+  /* ---------- Header: nav as stations on a line ---------- */
+  .top {
+    position: sticky; top: 10px; z-index: 30;
+    width: min(1200px, 100% - 20px); margin: 10px auto 0;
+    border-radius: 999px;
+    display: flex; align-items: center; gap: 18px;
+    padding: 8px 8px 8px 10px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; letter-spacing: -.01em; white-space: nowrap; }
+  .roundel { width: 34px; height: 34px; border-radius: 50%; border: 5px solid var(--saffron); display: grid; place-items: center; font-size: 11px; font-weight: 900; background: var(--paper); }
+  .stations { flex: 1; display: flex; justify-content: center; position: relative; margin: 0; padding: 0; list-style: none; }
+  .stations::before { content: ""; position: absolute; left: 8%; right: 8%; top: 50%; height: 4px; margin-top: -2px; background: var(--saffron); border-radius: 2px; }
+  .stations li { position: relative; padding: 0 clamp(6px, 1.6vw, 22px); }
+  .stations a {
+    position: relative; display: inline-flex; align-items: center; gap: 7px;
+    text-decoration: none; font-weight: 700; font-size: 14px;
+    padding: 4px 10px; border-radius: 999px; background: var(--paper);
+    box-shadow: 0 0 0 2px var(--ink);
+    transition: background .25s var(--ease-out), color .25s var(--ease-out);
+  }
+  .stations a:hover { background: var(--ink); color: var(--paper); }
+  .btn {
+    display: inline-flex; align-items: center; gap: 9px; justify-content: center;
+    font: inherit; font-weight: 800; font-size: 15px; text-decoration: none;
+    padding: 11px 18px; border-radius: 999px; border: 0; cursor: pointer;
+    transition: transform .3s var(--ease-out), background .3s var(--ease-out), box-shadow .3s var(--ease-out);
+    white-space: nowrap;
+  }
+  .btn-gold { background: var(--brass); color: var(--ink); box-shadow: inset 0 1px 0 rgb(255 255 255 / .7), 0 6px 14px -8px rgb(120 80 10 / .7); }
+  .btn-gold:hover { background: #e7c88a; transform: translateY(-1px); box-shadow: inset 0 1px 0 rgb(255 255 255 / .7), 0 10px 20px -10px rgb(120 80 10 / .8); }
+  .btn-line { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 2px var(--ink); }
+  .btn-line:hover { background: var(--ink); color: var(--paper); }
+
+  /* ---------- Hero stage: the network map, with Suprava standing in front of it ---------- */
+  .hero { padding-top: 8px; }
+  .stage {
+    position: relative;
+    width: min(100% - 20px, (100svh - 92px) * 1200 / 760, 1440px);
+    aspect-ratio: 1200 / 760;
+    margin: 0 auto;
+    container-type: inline-size;
+  }
+  .map-wrap { position: absolute; inset: 0; }
+  #map { width: 100%; height: 100%; display: block; touch-action: pan-y; }
+  #map text { font-family: var(--font); fill: var(--ink); font-size: 15px; font-weight: 600; }
+  #map .ix-label { font-weight: 800; font-size: 16.5px; }
+  #map .ix-sub { font-weight: 500; font-size: 13px; fill: var(--ink-2); }
+  #map .line { fill: none; stroke-width: 10; stroke-linecap: round; stroke-linejoin: round; }
+  #map .tick { stroke-width: 6; stroke-linecap: butt; }
+  #map .ix { fill: #fffdf8; stroke: var(--ink); stroke-width: 4; }
+  #map a { cursor: pointer; }
+  #map a:focus-visible { outline: none; }
+  #map a:focus-visible .ix, #map a:hover .ix { fill: var(--brass); }
+  .hero-copy {
+    position: absolute; left: 4.2%; top: 3%; width: 56%;
+    z-index: 2;
+  }
+  .hero-copy h1 {
+    margin: 0; font-weight: 900; letter-spacing: -.035em; line-height: .92;
+    font-size: clamp(38px, 7.4cqw, 104px); white-space: nowrap;
+  }
+  .hero-copy p { margin: .55em 0 0; font-size: clamp(15px, 1.5cqw, 21px); color: var(--ink-2); max-width: 46ch; line-height: 1.38; }
+  .hero-copy p strong { color: var(--ink); font-weight: 800; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: clamp(14px, 1.8cqw, 24px); }
+  .portrait {
+    position: absolute; right: -1%; bottom: 0; height: 75%; width: auto; z-index: 1;
+    filter: drop-shadow(0 24px 30px rgb(80 36 6 / .22));
+    pointer-events: none;
+  }
+  .legend {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px;
+    margin: clamp(12px, 1.6cqw, 20px) 0 0; padding: 0; list-style: none;
+  }
+  .legend li { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13.5px; }
+  .legend i { width: 22px; height: 8px; border-radius: 4px; background: var(--c); }
+  .legend .lens-hint { color: var(--ink-2); font-weight: 600; transition: opacity .6s var(--ease-out); }
+  .legend .lens-hint.gone { opacity: 0; }
+
+  /* line draw on arrival: the one authored motion moment */
+  @media (prefers-reduced-motion: no-preference) {
+    .js #map .line { stroke-dasharray: var(--len); stroke-dashoffset: var(--len); animation: draw 1.4s var(--ease-out) forwards; animation-delay: var(--d, 0s); }
+    .js #map .stop { opacity: 0; animation: pop .5s var(--ease-out) forwards; animation-delay: calc(var(--d, 0s) + .7s); }
+    .js #lens { opacity: 0; animation: pop .8s var(--ease-out) 1.6s forwards; }
+  }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes pop { to { opacity: 1; } }
+
+  /* ---------- Sections ---------- */
+  section.block { padding: clamp(72px, 10vw, 130px) 0 0; }
+  .block-head { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; margin-bottom: 36px; }
+  .block-head h2 { margin: 0; font-size: clamp(34px, 5vw, 60px); line-height: 1; letter-spacing: -.03em; font-weight: 900; }
+  .block-head .rule { height: 10px; border-radius: 5px; background: var(--c, var(--ink)); }
+  .lede { margin: -16px 0 40px; color: var(--ink-2); max-width: 62ch; font-size: 18px; }
+
+  /* projects as in-carriage strip maps */
+  .project { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 4vw, 64px); padding: 34px 0; border-top: 2px solid var(--ink); }
+  .project:last-child { border-bottom: 2px solid var(--ink); }
+  .project h3 { margin: 0; font-size: clamp(28px, 3.4vw, 42px); letter-spacing: -.025em; line-height: 1.02; font-weight: 900; }
+  .project .where { margin: 8px 0 0; font-weight: 700; color: var(--ink-2); }
+  .project ul.points { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; max-width: 64ch; }
+  .project ul.points li { padding-left: 22px; position: relative; }
+  .project ul.points li::before { content: ""; position: absolute; left: 0; top: .5em; width: 10px; height: 10px; border-radius: 50%; border: 3px solid var(--ink); background: var(--paper); }
+  .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+  .link-chip { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 14.5px; text-decoration: none; padding: 8px 14px; border-radius: 999px; box-shadow: inset 0 0 0 2px var(--ink); transition: background .25s var(--ease-out), color .25s var(--ease-out); }
+  .link-chip:hover { background: var(--ink); color: var(--paper); }
+  .link-chip:hover *, .cert:hover *, .stations a:hover *, .btn:hover * { color: inherit; }
+  .link-chip[aria-disabled="true"], .link-chip[aria-disabled="true"]:hover { box-shadow: inset 0 0 0 2px var(--paper-3); color: var(--ink-2); background: transparent; pointer-events: none; }
+
+  .strip { margin: 26px 0 4px; position: relative; padding: 6px 36px 0; }
+  .strip .rails { position: absolute; left: 42px; right: 42px; top: 6px; display: grid; gap: 3px; }
+  .strip .rails span { height: 8px; border-radius: 4px; background: var(--c); }
+  .strip ol { list-style: none; margin: 0; padding: 0; display: flex; justify-content: space-between; position: relative; }
+  .strip li { display: grid; justify-items: center; gap: 6px; font-size: 13px; font-weight: 700; width: 0; white-space: nowrap; }
+  .strip li::before { content: ""; width: 16px; height: 16px; border-radius: 50%; background: #fffdf8; border: 3.5px solid var(--ink); margin-top: calc(var(--rail-h, 8px) / 2 - 8px); }
+  .strip li.end::before { width: 22px; height: 22px; margin-top: calc(var(--rail-h, 8px) / 2 - 11px); background: var(--brass); }
+
+  /* experience + education as vertical line diagrams */
+  .vline { position: relative; display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+  .vline > li { display: grid; grid-template-columns: 150px 44px minmax(0, 1fr); gap: 0 18px; }
+  .vline .when { text-align: right; font-weight: 800; padding-top: 6px; font-size: 15px; }
+  .vline .track { position: relative; display: flex; justify-content: center; }
+  .vline .track::before { content: ""; position: absolute; top: 0; bottom: 0; width: 10px; border-radius: 5px; background: var(--c, var(--saffron)); }
+  .vline > li:first-child .track::before { top: 12px; }
+  .vline > li:last-child .track::before { bottom: auto; height: 22px; }
+  .vline .track b { position: relative; z-index: 1; width: 26px; height: 26px; margin-top: 3px; border-radius: 50%; background: #fffdf8; border: 4px solid var(--ink); }
+  .vline .body { padding: 0 0 44px; }
+  .vline h3 { margin: 0; font-size: 24px; line-height: 1.15; letter-spacing: -.015em; font-weight: 900; }
+  .vline .org { margin: 4px 0 10px; font-weight: 700; color: var(--ink-2); }
+  .vline p { margin: 0; max-width: 64ch; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .tag { font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--paper-2); }
+
+  .twin { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .degree { padding: 30px 22px 22px; border-radius: var(--radius); background: var(--paper-2); position: relative; overflow: hidden; }
+  .degree::before { content: ""; position: absolute; left: 22px; right: 22px; top: 0; height: 8px; border-radius: 0 0 4px 4px; background: var(--c); }
+  .degree h3 { margin: 0 0 4px; font-size: 22px; letter-spacing: -.015em; }
+  .degree .grade { font-size: 44px; font-weight: 900; letter-spacing: -.03em; line-height: 1; margin-top: 16px; }
+  .degree .grade small { font-size: 18px; font-weight: 700; color: var(--ink-2); letter-spacing: 0; }
+  .degree p { margin: 0; color: var(--ink-2); font-weight: 600; }
+
+  /* skills: the station index */
+  .index { columns: 4 200px; column-gap: 32px; margin: 0; padding: 0; list-style: none; }
+  .index-group { break-inside: avoid; margin: 0 0 30px; }
+  .index-group h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; font-size: 15px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; }
+  .index-group h3 i { width: 28px; height: 10px; border-radius: 5px; background: var(--c); }
+  .index-group ul { margin: 0; padding: 0; list-style: none; }
+  .index-group li { display: flex; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1.5px dotted var(--paper-3); font-weight: 600; }
+  .index-group li span { color: var(--ink-2); font-weight: 500; font-size: 14px; }
+
+  .certs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .cert { display: grid; gap: 8px; padding: 20px 22px; border-radius: var(--radius); box-shadow: inset 0 0 0 2px var(--ink); text-decoration: none; transition: background .25s var(--ease-out), color .25s var(--ease-out); }
+  .cert:hover { background: var(--ink); color: var(--paper); }
+  .cert strong { font-size: 20px; line-height: 1.2; letter-spacing: -.01em; }
+  .cert span { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; }
+
+  /* terminus */
+  .terminus { margin-top: clamp(80px, 12vw, 150px); background: var(--ink); color: var(--paper); padding: clamp(56px, 8vw, 100px) 0 40px; position: relative; overflow: hidden; }
+  .terminus .bars { position: absolute; left: 0; right: 0; top: 0; display: grid; gap: 4px; }
+  .terminus .bars span { height: 8px; background: var(--c); }
+  .terminus h2 { margin: 0; font-size: clamp(44px, 8vw, 112px); line-height: .9; letter-spacing: -.04em; font-weight: 900; }
+  .terminus p { color: #d8c9b6; max-width: 46ch; font-size: 19px; margin: 18px 0 30px; }
+  .terminus .btn-line { color: var(--paper); box-shadow: inset 0 0 0 2px var(--paper); }
+  .terminus .btn-line:hover { background: var(--paper); color: var(--ink); }
+  .terminus a:focus-visible { outline-color: var(--brass); }
+  .foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 70px; padding-top: 20px; border-top: 1.5px solid #3b2d22; color: #b9a690; font-size: 14px; }
+
+  /* ---------- Small screens ---------- */
+  @media (max-width: 860px) {
+    .stations { display: none; }
+    .top { justify-content: space-between; }
+    .stage { width: 100%; aspect-ratio: auto; display: grid; grid-template-columns: minmax(0, 1fr); container-type: normal; }
+    .hero-copy { position: static; width: auto; padding: 24px 20px 0; }
+    .hero-copy h1 { font-size: clamp(46px, 14vw, 72px); white-space: normal; }
+    .hero-copy p { font-size: 18px; }
+    .portrait { position: static; order: 2; height: auto; width: min(80%, 360px); justify-self: end; margin-top: -24px; }
+    .map-wrap { position: relative; order: 3; overflow-x: auto; overscroll-behavior-x: contain; border-block: 2px solid var(--ink); background: var(--paper); }
+    #map { width: 900px; height: auto; }
+    #lens { display: none; }
+    .legend .lens-hint { display: none; }
+    .project { grid-template-columns: 1fr; }
+    .vline > li { grid-template-columns: 34px minmax(0, 1fr); }
+    .vline .when { grid-column: 2; grid-row: 1; text-align: left; padding: 0 0 4px; }
+    .vline .track { grid-column: 1; grid-row: 1 / span 2; }
+    .vline .body { grid-column: 2; }
+    .twin, .certs { grid-template-columns: 1fr; }
+    .strip li { font-size: 11.5px; }
+    .strip li:nth-child(even) span { transform: translateY(16px); }
+    .strip { padding-bottom: 18px; }
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></symbol>
+  <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+</svg>
+
+<header class="top glass">
+  <a class="brand" href="#top"><span class="roundel">SD</span>Suprava Dutta</a>
+  <ul class="stations">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="btn btn-gold" href="../../public/suprava-dutta-resume.pdf" download><svg class="icon"><use href="#i-download"/></svg>Resume</a>
+</header>
+
+<main id="top">
+  <section class="hero" aria-labelledby="hero-name">
+    <div class="stage">
+      <div class="hero-copy">
+        <h1 id="hero-name">Suprava Dutta</h1>
+        <p><strong>AI engineer</strong> building multi-agent LLM systems: orchestration, intent routing and retrieval, with a soldering iron for IoT on the side.</p>
+        <div class="hero-actions">
+          <a class="btn btn-gold" href="../../public/suprava-dutta-resume.pdf" download><svg class="icon"><use href="#i-download"/></svg>Download resume</a>
+          <a class="btn btn-line" href="https://github.com/sDaCoder" target="_blank" rel="noopener"><svg class="icon"><use href="#i-github"/></svg>GitHub</a>
+          <a class="btn btn-line" href="https://www.linkedin.com/in/suprava-dutta-sda-e23" target="_blank" rel="noopener"><svg class="icon"><use href="#i-linkedin"/></svg>LinkedIn</a>
+        </div>
+        <ul class="legend" aria-label="Map lines">
+          <li style="--c:var(--saffron)"><i></i>Agents</li>
+          <li style="--c:var(--rust)"><i></i>Backend</li>
+          <li style="--c:var(--ochre)"><i></i>Web</li>
+          <li style="--c:var(--graphite)"><i></i>Hardware</li>
+          <li class="lens-hint" id="lensHint"><svg class="icon" style="width:15px;height:15px"><use href="#i-search"/></svg>Move over the map to look closer</li>
+        </ul>
+      </div>
+
+      <div class="map-wrap">
+        <svg id="map" viewBox="0 0 1200 760" role="img" aria-labelledby="map-title map-desc">
+          <title id="map-title">Network map of Suprava's work</title>
+          <desc id="map-desc">Four lines (Agents, Backend, Web and Hardware) whose stations are technologies. Interchanges are projects and roles: Remote Programmer, Recon AI, CurioGenius AI, RASoR IIT Madras and the Smart Home Server.</desc>
+          <defs>
+            <clipPath id="lensClip"><circle id="lensClipCircle" cx="480" cy="344" r="84" /></clipPath>
+            <radialGradient id="lensEdge" cx="50%" cy="50%" r="50%">
+              <stop offset="72%" stop-color="#fff" stop-opacity="0" />
+              <stop offset="90%" stop-color="#fff" stop-opacity=".35" />
+              <stop offset="100%" stop-color="#5b2a06" stop-opacity=".28" />
+            </radialGradient>
+            <linearGradient id="lensSpec" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#fff" stop-opacity=".95" />
+              <stop offset=".45" stop-color="#fff" stop-opacity="0" />
+            </linearGradient>
+            <filter id="lensShadow" x="-40%" y="-40%" width="180%" height="180%">
+              <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#46200a" flood-opacity=".32" />
+            </filter>
+          </defs>
+
+          <g id="net" transform="translate(40 300) scale(0.74) translate(-60 -100)" font-family="Overpass, sans-serif" font-size="17" font-weight="600" fill="#1a120c">
+            <!-- lines -->
+            <path class="line" fill="none" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--saffron);--d:0s" d="M60 220 H300 L390 310 H760" />
+            <path class="line" fill="none" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--rust);--d:.25s" d="M480 100 V298 H660 V560" />
+            <path class="line" fill="none" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--ochre);--d:.5s" d="M120 470 H330 L410 390 H540" />
+            <path class="line" fill="none" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--graphite);--d:.75s" d="M300 650 H460 L540 570 V390" />
+
+            <!-- Agents stations -->
+            <g class="stop" style="--d:0s">
+              <path class="tick" fill="none" stroke-width="6" stroke="var(--saffron)" d="M100 220 v-14 M175 220 v-14 M250 220 v-14 M430 310 v14 M570 310 v14 M725 310 v14" />
+              <text x="100" y="196" text-anchor="middle">LangChain</text>
+              <text x="175" y="176" text-anchor="middle">LangGraph</text>
+              <text x="250" y="196" text-anchor="middle">RAG</text>
+              <text x="430" y="346" text-anchor="middle">BM25</text>
+              <text x="570" y="346" text-anchor="middle">Redis</text>
+              <text x="725" y="346" text-anchor="middle">OpenAI</text>
+            </g>
+            <!-- Backend stations -->
+            <g class="stop" style="--d:.25s">
+              <path class="tick" fill="none" stroke-width="6" stroke="var(--rust)" d="M480 150 h-14 M480 225 h-14 M660 400 h14 M660 470 h14 M660 540 h14" />
+              <text x="458" y="155" text-anchor="end">Postgres</text>
+              <text x="458" y="230" text-anchor="end">FastAPI</text>
+              <text x="684" y="405">DynamoDB</text>
+              <text x="684" y="475">AWS EC2</text>
+              <text x="684" y="545">boto3</text>
+            </g>
+            <!-- Web stations -->
+            <g class="stop" style="--d:.5s">
+              <path class="tick" fill="none" stroke-width="6" stroke="var(--ochre)" d="M150 470 v14 M225 470 v14 M362 438 l10 10 M455 390 v-14 M500 390 v14" />
+              <text x="150" y="506" text-anchor="middle">Figma</text>
+              <text x="225" y="506" text-anchor="middle">React</text>
+              <text x="384" y="470">Next.js</text>
+              <text x="455" y="368" text-anchor="middle">Express</text>
+              <text x="500" y="424" text-anchor="middle">Node.js</text>
+            </g>
+            <!-- Hardware stations -->
+            <g class="stop" style="--d:.75s">
+              <path class="tick" fill="none" stroke-width="6" stroke="var(--graphite)" d="M335 650 v14 M410 650 v14 M500 610 l10 10 M540 520 h14 M540 455 h14" />
+              <text x="335" y="686" text-anchor="middle">Embedded C</text>
+              <text x="410" y="706" text-anchor="middle">Arduino</text>
+              <text x="522" y="640">ESP32</text>
+              <text x="564" y="525">MQTT</text>
+              <text x="564" y="460">JWT</text>
+            </g>
+
+            <!-- Interchanges: projects and roles -->
+            <g class="stop" style="--d:.9s">
+              <a href="#experience" data-ix="remote">
+                <title>Remote Programmer: AI Development Intern, June to September 2026</title>
+                <circle class="ix" fill="#ffffff" stroke="#1a120c" stroke-width="4" cx="345" cy="265" r="13" />
+                <text class="ix-label" font-weight="800" font-size="19" x="330" y="305" text-anchor="end">Remote Programmer</text>
+                <text class="ix-sub" font-weight="500" font-size="15" fill="#5b4a3d" x="330" y="323" text-anchor="end">AI intern · 2026</text>
+              </a>
+              <a href="#recon" data-ix="recon">
+                <title>Recon AI: reconciliation agents</title>
+                <rect class="ix" fill="#ffffff" stroke="#1a120c" stroke-width="4" x="467" y="290" width="26" height="34" rx="13" />
+                <text class="ix-label" font-weight="800" font-size="19" x="500" y="282">Recon AI</text>
+              </a>
+              <a href="#curio" data-ix="curio">
+                <title>CurioGenius AI: business development pod</title>
+                <rect class="ix" fill="#ffffff" stroke="#1a120c" stroke-width="4" x="647" y="290" width="26" height="34" rx="13" />
+                <text class="ix-label" font-weight="800" font-size="19" x="684" y="282">CurioGenius AI</text>
+              </a>
+              <a href="#experience" data-ix="rasor">
+                <title>RASoR, IIT Madras: Web Administrator, 2024</title>
+                <circle class="ix" fill="#ffffff" stroke="#1a120c" stroke-width="4" cx="300" cy="470" r="13" />
+                <text class="ix-label" font-weight="800" font-size="19" x="300" y="506" text-anchor="middle">RASoR</text>
+                <text class="ix-sub" font-weight="500" font-size="15" fill="#5b4a3d" x="300" y="524" text-anchor="middle">IIT Madras · 2024</text>
+              </a>
+              <a href="#smarthome" data-ix="smarthome">
+                <title>Smart Home Server: ESP32 and MQTT</title>
+                <circle class="ix" fill="#ffffff" stroke="#1a120c" stroke-width="4" cx="540" cy="390" r="14" />
+                <text class="ix-label" font-weight="800" font-size="19" x="562" y="383">Smart Home</text>
+                <text class="ix-sub" font-weight="500" font-size="15" fill="#5b4a3d" x="562" y="401">ESP32 server</text>
+              </a>
+            </g>
+          </g>
+
+          <!-- Liquid glass lens: a real magnifier over the network -->
+          <g id="lens" aria-hidden="true" pointer-events="none">
+            <g filter="url(#lensShadow)">
+              <circle id="lensBase" cx="480" cy="344" r="84" fill="#fdfcf9" />
+            </g>
+            <g clip-path="url(#lensClip)">
+              <use id="lensMag" href="#net" transform="translate(480 344) scale(1.75) translate(-480 -344)" />
+            </g>
+            <g id="lensRim" transform="translate(480 344)">
+              <circle r="84" fill="url(#lensEdge)" />
+              <path d="M-62 -38 A72 72 0 0 1 22 -70" fill="none" stroke="url(#lensSpec)" stroke-width="7" stroke-linecap="round" />
+              <circle r="83.5" fill="none" stroke="#fff" stroke-opacity=".95" stroke-width="1.5" />
+              <circle r="85.5" fill="none" stroke="#e46000" stroke-opacity=".18" stroke-width="1" />
+              <circle r="81.5" fill="none" stroke="#3a6cff" stroke-opacity=".10" stroke-width="1" />
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <img class="portrait" src="assets/portrait.webp" width="900" height="1004" alt="Suprava Dutta in an orange t-shirt, arms folded on a table, wearing glasses and a gold wristwatch" />
+    </div>
+  </section>
+
+  <section class="block wrap" id="projects" aria-labelledby="projects-h">
+    <div class="block-head" style="--c:var(--saffron)"><h2 id="projects-h">Projects</h2><span class="rule"></span></div>
+    <p class="lede">Each project is an interchange on the map. Its strip shows the lines it runs on and the stations it stops at.</p>
+
+    <article class="project" id="recon">
+      <div>
+        <h3>Recon AI</h3>
+        <p class="where">Agents line × Backend line</p>
+        <div class="links">
+          <a class="link-chip" href="https://github.com/sDaCoder/reconai" target="_blank" rel="noopener"><svg class="icon"><use href="#i-code"/></svg>Repository</a>
+          <a class="link-chip" href="https://reconai-one.vercel.app/" target="_blank" rel="noopener"><svg class="icon"><use href="#i-arrow"/></svg>Live site</a>
+        </div>
+      </div>
+      <div>
+        <ul class="points">
+          <li>Reconciles merchant transactions, payment-provider settlements and bank statements to find discrepancies.</li>
+          <li>A QA agent analyses the reason behind each discrepancy.</li>
+        </ul>
+        <div class="strip" style="--rail-h:19px">
+          <div class="rails"><span style="--c:var(--saffron)"></span><span style="--c:var(--rust)"></span></div>
+          <ol><li><span>LangChain</span></li><li><span>OpenAI</span></li><li><span>FastAPI</span></li><li class="end"><span>Postgres</span></li></ol>
+        </div>
+      </div>
+    </article>
+
+    <article class="project" id="curio">
+      <div>
+        <h3>CurioGenius AI</h3>
+        <p class="where">Agents line × Backend line</p>
+        <div class="links">
+          <a class="link-chip" href="https://github.com/sDaCoder/business-development-pod" target="_blank" rel="noopener"><svg class="icon"><use href="#i-code"/></svg>Repository</a>
+        </div>
+      </div>
+      <div>
+        <ul class="points">
+          <li>A business development pod: a multi-agent system of four agents (business, designer, developer and testing).</li>
+          <li>Vector search maintains the user persona across the conversation.</li>
+          <li>AWS DynamoDB integration, with the FastAPI backend deployed on AWS EC2.</li>
+        </ul>
+        <div class="strip" style="--rail-h:19px">
+          <div class="rails"><span style="--c:var(--saffron)"></span><span style="--c:var(--rust)"></span></div>
+          <ol><li><span>4 agents</span></li><li><span>Vector search</span></li><li><span>FastAPI</span></li><li><span>DynamoDB</span></li><li class="end"><span>AWS EC2</span></li></ol>
+        </div>
+      </div>
+    </article>
+
+    <article class="project" id="smarthome">
+      <div>
+        <h3>Smart Home Server</h3>
+        <p class="where">Hardware line × Web line</p>
+        <div class="links">
+          <span class="link-chip" aria-disabled="true"><svg class="icon"><use href="#i-code"/></svg>Repository link pending</span>
+        </div>
+      </div>
+      <div>
+        <ul class="points">
+          <li>An IoT web server to control home appliances remotely, with the ESP32 as a Wi-Fi access point and Node.js as the backend.</li>
+          <li>MQTT for bidirectional communication between the server and devices.</li>
+          <li>JWT-based authentication so only verified users reach the API.</li>
+        </ul>
+        <div class="strip" style="--rail-h:19px">
+          <div class="rails"><span style="--c:var(--graphite)"></span><span style="--c:var(--ochre)"></span></div>
+          <ol><li><span>ESP32</span></li><li><span>MQTT</span></li><li><span>Node.js</span></li><li class="end"><span>JWT</span></li></ol>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="block wrap" id="experience" aria-labelledby="exp-h">
+    <div class="block-head" style="--c:var(--rust)"><h2 id="exp-h">Experience</h2><span class="rule"></span></div>
+    <ol class="vline" style="--c:var(--saffron)">
+      <li>
+        <div class="when">Jun – Sep 2026</div>
+        <div class="track"><b></b></div>
+        <div class="body">
+          <h3>AI Development Intern</h3>
+          <p class="org"><a href="https://remoteprogrammer.com/" target="_blank" rel="noopener">Remote Programmer Private Limited</a></p>
+          <p>Architected the end-to-end design of a multi-agent conversational AI assistant for a U.S.-based client, specifying multi-agent orchestration and intent routing, with agents built on LangChain and LangGraph.</p>
+          <div class="tag-row"><span class="tag">LangChain</span><span class="tag">LangGraph</span><span class="tag">RAG</span><span class="tag">BM25</span><span class="tag">Redis</span><span class="tag">Jira</span></div>
+          <div class="links">
+            <a class="link-chip" href="https://drive.google.com/file/d/1i9zXse0AQ8ZyCzLN63xl8NGdoBtRpndp/view" target="_blank" rel="noopener"><svg class="icon"><use href="#i-file"/></svg>Offer letter</a>
+            <a class="link-chip" href="https://drive.google.com/file/d/1sGFCmk3e9eTHVFZ8ev960g6TlfD1Uuhf/view" target="_blank" rel="noopener"><svg class="icon"><use href="#i-file"/></svg>Completion certificate</a>
+          </div>
+        </div>
+      </li>
+      <li style="--c:var(--ochre)">
+        <div class="when">2024</div>
+        <div class="track"><b></b></div>
+        <div class="body">
+          <h3>Web Administrator</h3>
+          <p class="org">Ramanujan Society of Research, IIT Madras</p>
+          <p>Redesigned and upgraded the society's website, and managed its ongoing maintenance.</p>
+          <div class="tag-row"><span class="tag">React</span><span class="tag">Figma</span></div>
+          <div class="links">
+            <a class="link-chip" href="https://rasoriitm.vercel.app/" target="_blank" rel="noopener"><svg class="icon"><use href="#i-arrow"/></svg>Live website</a>
+            <a class="link-chip" href="https://drive.google.com/file/d/1KMc1hyiZEPKC6MI4m-3OfpUkt9tYo9ah/view" target="_blank" rel="noopener"><svg class="icon"><use href="#i-file"/></svg>Certificate</a>
+          </div>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="block wrap" id="education" aria-labelledby="edu-h">
+    <div class="block-head" style="--c:var(--ochre)"><h2 id="edu-h">Education</h2><span class="rule"></span></div>
+    <p class="lede">Two degrees running on parallel tracks, 2023 to 2027.</p>
+    <div class="twin">
+      <div class="degree" style="--c:var(--saffron)">
+        <h3>B.Tech, Computer Science &amp; Engineering</h3>
+        <p>IEM, Kolkata · 2023 – 2027 · 6th semester</p>
+        <div class="grade">8.93 <small>/ 10 CGPA</small></div>
+      </div>
+      <div class="degree" style="--c:var(--rust)">
+        <h3>BS, Electronics Systems Engineering</h3>
+        <p>IIT Madras · 2023 – 2027 · through Diploma</p>
+        <div class="grade">7.9 <small>/ 10 CGPA</small></div>
+      </div>
+    </div>
+    <ol class="vline" style="--c:var(--graphite); margin-top: 48px">
+      <li>
+        <div class="when">2023</div>
+        <div class="track"><b></b></div>
+        <div class="body">
+          <h3>Entrance examinations</h3>
+          <p class="org">JEE Main: 92 percentile, qualified for JEE Advanced · WBJEE: AIR 3776</p>
+        </div>
+      </li>
+      <li>
+        <div class="when">2023</div>
+        <div class="track"><b></b></div>
+        <div class="body">
+          <h3>Class XII · 82.6%</h3>
+          <p class="org">Nava Nalanda</p>
+        </div>
+      </li>
+      <li>
+        <div class="when">2021</div>
+        <div class="track"><b></b></div>
+        <div class="body">
+          <h3>Class X · 88.42%</h3>
+          <p class="org">Nava Nalanda</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="block wrap" id="skills" aria-labelledby="skills-h">
+    <div class="block-head" style="--c:var(--graphite)"><h2 id="skills-h">Station index</h2><span class="rule"></span></div>
+    <div class="index">
+      <div class="index-group" style="--c:var(--ink)">
+        <h3><i></i>Languages</h3>
+        <ul><li>Python</li><li>Java</li><li>C</li><li>C++</li><li>JavaScript</li><li>SQL</li><li>MongoDB</li><li>Linux</li></ul>
+      </div>
+      <div class="index-group" style="--c:var(--saffron)">
+        <h3><i></i>Agents</h3>
+        <ul><li>LangChain</li><li>LangGraph</li><li>RAG <span>retrieval</span></li><li>BM25</li><li>Redis</li><li>OpenAI</li></ul>
+      </div>
+      <div class="index-group" style="--c:var(--rust)">
+        <h3><i></i>Backend &amp; cloud</h3>
+        <ul><li>FastAPI</li><li>Express</li><li>AWS</li><li>boto3</li><li>DynamoDB</li><li>Postgres</li></ul>
+      </div>
+      <div class="index-group" style="--c:var(--ochre)">
+        <h3><i></i>Web</h3>
+        <ul><li>React</li><li>Next.js</li><li>Figma</li></ul>
+      </div>
+      <div class="index-group" style="--c:var(--graphite)">
+        <h3><i></i>Hardware</h3>
+        <ul><li>ESP32</li><li>Arduino</li><li>Embedded C</li><li>MQTT</li></ul>
+      </div>
+      <div class="index-group" style="--c:var(--brass-deep)">
+        <h3><i></i>Tools</h3>
+        <ul><li>Postman</li><li>Jira</li><li>Claude Code</li><li>LeetCode <span>300+ solved</span></li></ul>
+      </div>
+    </div>
+
+    <h3 style="font-size:22px;margin:40px 0 16px;letter-spacing:-.01em">Courses &amp; certifications</h3>
+    <div class="certs">
+      <a class="cert" href="https://verify.skilljar.com/c/8ffyqwasvccp" target="_blank" rel="noopener"><strong>Model Context Protocol</strong><span>Anthropic <svg class="icon"><use href="#i-arrow"/></svg></span></a>
+      <a class="cert" href="https://www.coursera.org/account/accomplishments/verify/YL0YG7POCOB9" target="_blank" rel="noopener"><strong>Spring Boot</strong><span>Coursera <svg class="icon"><use href="#i-arrow"/></svg></span></a>
+      <a class="cert" href="https://www.udemy.com/certificate/UC-5150e81f-9f67-4494-8d9d-606d1579a663/" target="_blank" rel="noopener"><strong>Full Stack Web Development</strong><span>Udemy <svg class="icon"><use href="#i-arrow"/></svg></span></a>
+    </div>
+  </section>
+
+  <section class="terminus" id="contact" aria-labelledby="contact-h">
+    <div class="bars"><span style="--c:var(--saffron)"></span><span style="--c:var(--rust)"></span><span style="--c:var(--ochre)"></span><span style="--c:var(--graphite)"></span></div>
+    <div class="wrap">
+      <h2 id="contact-h">All lines<br />end here.</h2>
+      <p>Open to AI, ML and backend roles. The fastest way to reach me is email.</p>
+      <div class="hero-actions">
+        <a class="btn btn-gold" href="mailto:supravadutta.nnhs.kol.e2321@gmail.com"><svg class="icon"><use href="#i-mail"/></svg>Email me</a>
+        <a class="btn btn-line" href="../../public/suprava-dutta-resume.pdf" download><svg class="icon"><use href="#i-download"/></svg>Resume</a>
+        <a class="btn btn-line" href="https://github.com/sDaCoder" target="_blank" rel="noopener"><svg class="icon"><use href="#i-github"/></svg>GitHub</a>
+        <a class="btn btn-line" href="https://www.linkedin.com/in/suprava-dutta-sda-e23" target="_blank" rel="noopener"><svg class="icon"><use href="#i-linkedin"/></svg>LinkedIn</a>
+        <a class="btn btn-line" href="https://leetcode.com/u/sda_e23/" target="_blank" rel="noopener"><svg class="icon"><use href="#i-code"/></svg>LeetCode</a>
+      </div>
+      <div class="foot"><span>© 2026 Suprava Dutta</span><span>Kolkata, India</span></div>
+    </div>
+  </section>
+</main>
+
+<script>
+  document.documentElement.classList.add('js');
+  (() => {
+    const svg = document.getElementById('map');
+    const clip = document.getElementById('lensClipCircle');
+    const base = document.getElementById('lensBase');
+    const mag = document.getElementById('lensMag');
+    const rim = document.getElementById('lensRim');
+    const hint = document.getElementById('lensHint');
+    const Z = 1.75;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // on phones the copy and portrait leave the stage, so crop the viewBox to the network itself
+    const narrow = matchMedia('(max-width: 860px)');
+    const fit = () => svg.setAttribute('viewBox', narrow.matches ? '20 280 720 480' : '0 0 1200 760');
+    fit(); narrow.addEventListener('change', fit);
+
+    svg.querySelectorAll('.line').forEach(p => p.style.setProperty('--len', Math.ceil(p.getTotalLength())));
+
+    // centre of an interchange in the svg's own coordinates (the network group is transformed)
+    const centreOf = (a) => {
+      const shape = a.querySelector('.ix'), b = shape.getBBox();
+      const m = svg.getScreenCTM().inverse().multiply(shape.getScreenCTM());
+      const pt = svg.createSVGPoint(); pt.x = b.x + b.width / 2; pt.y = b.y + b.height / 2;
+      return pt.matrixTransform(m);
+    };
+    const home = centreOf(svg.querySelector('[data-ix="recon"]'));
+    let cur = { x: home.x, y: home.y }, target = { ...cur }, raf = 0;
+    const set = ({ x, y }) => {
+      clip.setAttribute('cx', x); clip.setAttribute('cy', y);
+      base.setAttribute('cx', x); base.setAttribute('cy', y);
+      mag.setAttribute('transform', `translate(${x} ${y}) scale(${Z}) translate(${-x} ${-y})`);
+      rim.setAttribute('transform', `translate(${x} ${y})`);
+    };
+    const tick = () => {
+      cur.x += (target.x - cur.x) * 0.18;
+      cur.y += (target.y - cur.y) * 0.18;
+      set(cur);
+      raf = Math.hypot(target.x - cur.x, target.y - cur.y) > 0.3 ? requestAnimationFrame(tick) : 0;
+    };
+    const moveTo = (x, y) => {
+      target = { x: Math.max(70, Math.min(1130, x)), y: Math.max(70, Math.min(720, y)) };
+      if (reduce) { cur = { ...target }; set(cur); return; }
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
+    const toSvg = (e) => {
+      const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+      return pt.matrixTransform(svg.getScreenCTM().inverse());
+    };
+    svg.addEventListener('pointermove', (e) => {
+      const p = toSvg(e); moveTo(p.x, p.y);
+      hint.classList.add('gone');
+    });
+    // keyboard: focusing an interchange moves the lens onto it
+    svg.querySelectorAll('[data-ix]').forEach(a => {
+      a.addEventListener('focus', () => { const c = centreOf(a); moveTo(c.x, c.y); });
+    });
+    set(cur);
+  })();
+</script>
+</body>
+</html>

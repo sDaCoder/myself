@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-22T03:10:00+05:30",
+  "title": "Design System: Suprava Dutta — Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "stage": { "role": "neutral", "displayName": "Stage Black", "canonical": "oklch(13.8% 0.008 60.4)", "tonalRamp": ["#0e0a08", "#282421", "#45413e", "#65605d", "#86817e", "#a9a4a0", "#cdc8c4", "#f0eeec"] },
+      "stage-raised": { "role": "neutral", "displayName": "Raised Stage" },
+      "hairline": { "role": "neutral", "displayName": "Rule Brown" },
+      "ivory": { "role": "neutral", "displayName": "Lamp Ivory", "canonical": "oklch(95.5% 0.014 74.4)", "tonalRamp": ["#0f0a05", "#29241e", "#47413a", "#666059", "#878179", "#aaa49c", "#cfc8bf", "#f4ede4"] },
+      "ivory-muted": { "role": "neutral", "displayName": "Muted Ivory" },
+      "ivory-faint": { "role": "neutral", "displayName": "Faint Ivory" },
+      "saffron": { "role": "primary", "displayName": "Shirt Saffron", "canonical": "oklch(64.7% 0.183 45.5)", "tonalRamp": ["#260000", "#5b0000", "#870000", "#ae2c00", "#d65300", "#fa7c39", "#ffb491", "#ffe9de"] },
+      "marigold": { "role": "primary", "displayName": "Sleeve Marigold", "canonical": "oklch(79.7% 0.170 72.6)", "tonalRamp": ["#2b0000", "#510000", "#742600", "#994900", "#be6c00", "#e49000", "#ffb532", "#ffeaca"] },
+      "ember": { "role": "tertiary", "displayName": "Shadow Ember", "canonical": "oklch(57.3% 0.168 43.4)", "tonalRamp": ["#210000", "#510000", "#830000", "#a93300", "#d15818", "#e9885e", "#f5b9a1", "#fdeae2"] },
+      "brass": { "role": "secondary", "displayName": "Watch-Case Brass", "canonical": "oklch(80.5% 0.093 82.6)", "tonalRamp": ["#1c0400", "#3a1e00", "#5a3c00", "#7b5b14", "#9e7d3b", "#c2a05e", "#e7c482", "#f8edd9"] },
+      "brass-lit": { "role": "secondary", "displayName": "Lit Brass (hover)" },
+      "glass-fill": { "role": "neutral", "displayName": "Glass Fill (top)" },
+      "glass-fill-low": { "role": "neutral", "displayName": "Glass Fill (bottom)" },
+      "glass-tint-dark": { "role": "neutral", "displayName": "Smoked Glass Tint" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The hero name, once per site; surname set as outline behind the portrait." },
+      "headline": { "displayName": "Headline", "purpose": "Slide titles; may carry one marigold clause." },
+      "title": { "displayName": "Title", "purpose": "Project names." },
+      "title-sm": { "displayName": "Title (small)", "purpose": "Role names in Experience." },
+      "lead": { "displayName": "Lead", "purpose": "One sentence under a slide title, muted ivory, max 34ch." },
+      "body": { "displayName": "Body", "purpose": "Paragraphs, max 62ch, tabular numerals." },
+      "label": { "displayName": "Label", "purpose": "Pane headers, table headers, group labels." },
+      "data": { "displayName": "Data (mono)", "purpose": "Dates, grades and stack tags only." }
+    },
+    "shadows": [
+      { "name": "glass-rim", "value": "inset 0 1px 0.5px rgb(255 255 255 / .55), inset 0 -1px 1px rgb(255 255 255 / .12), inset 0 0 0 1px rgb(255 240 225 / .12)", "purpose": "The rim of every Liquid Glass surface." },
+      { "name": "glass-float", "value": "0 20px 40px -20px rgb(0 0 0 / .7)", "purpose": "Lifts glass off the light pool; always paired with glass-rim." },
+      { "name": "portrait-halo", "value": "drop-shadow(0 -10px 60px rgb(254 168 0 / .25))", "purpose": "Stage light spilling around the hero portrait only." },
+      { "name": "glow-field", "value": "520px circle, filter: blur(80px), opacity .32, saffron or marigold", "purpose": "Depth behind project slides." }
+    ],
+    "motion": [
+      { "name": "ease-out-expo", "value": "cubic-bezier(.16, 1, .3, 1)", "purpose": "Every transition and entrance." },
+      { "name": "arrival-light", "value": "2.2s ease-out-expo, opacity 0 + scale .9 → 1", "purpose": "Stage light rises once on load." },
+      { "name": "arrival-settle", "value": "1.6s ease-out-expo, blur 18px + translateY 14px → 0", "purpose": "Hero name and panes settle out of focus." },
+      { "name": "reveal", "value": "1s ease-out-expo, blur 12px + translateY 18px → 0, once", "purpose": "Slide blocks come into focus on scroll." },
+      { "name": "hover", "value": "300ms ease-out-expo", "purpose": "Button and pill state changes." }
+    ],
+    "breakpoints": [
+      { "name": "md", "value": "900px", "purpose": "Below: single column, one hero pane, compact dock." }
+    ],
+    "glass": {
+      "recipe": "background: linear-gradient(180deg, rgb(255 244 230 / .14), rgb(255 244 230 / .05)); backdrop-filter: blur(14px) saturate(1.8) brightness(1.05); box-shadow: glass-rim, glass-float; ::before radial-gradient(60% 120% at var(--sx) var(--sy), rgb(255 255 255 / .16), transparent 60%)",
+      "refraction": "Chromium only: per-element SVG filter (feGaussianBlur 3 → feDisplacementMap with an edge map from a rounded-rect SDF, edge ≤28px, scale −min(70, h·0.9)) applied via backdrop-filter: url(#id). See design/demos/c-keynote-stage.html.",
+      "reducedTransparency": "background: #15100c; backdrop-filter: none"
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Brass pill for the resume download and email; at most two on screen.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"/></svg>Download resume</a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 9px; background: #ddba78; color: #0b0806; font-family: 'Hanken Grotesk', sans-serif; font-weight: 700; font-size: 15.5px; text-decoration: none; padding: 13px 22px; border-radius: 999px; transition: background .3s cubic-bezier(.16,1,.3,1), transform .3s cubic-bezier(.16,1,.3,1); } .ds-btn-primary:hover { background: #e9cc93; transform: translateY(-1px); } .ds-btn-primary:focus-visible { outline: 2px solid #fea800; outline-offset: 3px; }"
+    },
+    {
+      "name": "Glass Button",
+      "kind": "button",
+      "refersTo": "button-glass",
+      "description": "Secondary actions (GitHub, LinkedIn, LeetCode) in the liquid-glass material.",
+      "html": "<div class=\"ds-stage\"><a class=\"ds-btn-glass\" href=\"#\">GitHub</a></div>",
+      "css": ".ds-stage { padding: 28px; background: radial-gradient(60% 90% at 50% 100%, rgba(228,96,0,.55), transparent 70%), #0b0806; } .ds-btn-glass { display: inline-flex; align-items: center; color: #f6efe6; font-family: 'Hanken Grotesk', sans-serif; font-weight: 700; font-size: 15.5px; text-decoration: none; padding: 13px 22px; border-radius: 999px; background: linear-gradient(180deg, rgba(255,244,230,.14), rgba(255,244,230,.05)); backdrop-filter: blur(14px) saturate(1.8); box-shadow: inset 0 1px .5px rgba(255,255,255,.55), inset 0 -1px 1px rgba(255,255,255,.12), inset 0 0 0 1px rgba(255,240,225,.12), 0 20px 40px -20px rgba(0,0,0,.7); transition: background .3s cubic-bezier(.16,1,.3,1); } .ds-btn-glass:hover { background: rgba(255,244,230,.18); } .ds-btn-glass:focus-visible { outline: 2px solid #fea800; outline-offset: 3px; }"
+    },
+    {
+      "name": "Dock",
+      "kind": "nav",
+      "refersTo": "dock",
+      "description": "Fixed Liquid Glass navigation pill; current section filled; brass resume last.",
+      "html": "<div class=\"ds-stage\"><nav class=\"ds-dock\"><a href=\"#\" aria-current=\"true\">Projects</a><a href=\"#\">Experience</a><a href=\"#\">Skills</a><a class=\"ds-dock-resume\" href=\"#\">Resume</a></nav></div>",
+      "css": ".ds-stage { padding: 28px; background: radial-gradient(60% 90% at 50% 100%, rgba(254,168,0,.5), transparent 70%), #0b0806; } .ds-dock { display: inline-flex; gap: 4px; padding: 6px; border-radius: 999px; background: linear-gradient(180deg, rgba(24,15,9,.62), rgba(24,15,9,.5)); backdrop-filter: blur(14px) saturate(1.8); box-shadow: inset 0 1px .5px rgba(255,255,255,.55), inset 0 -1px 1px rgba(255,255,255,.12), inset 0 0 0 1px rgba(255,240,225,.12), 0 20px 40px -20px rgba(0,0,0,.7); font-family: 'Hanken Grotesk', sans-serif; } .ds-dock a { padding: 10px 16px; border-radius: 999px; color: #f6efe6; text-decoration: none; font-size: 14.5px; font-weight: 600; transition: background .3s cubic-bezier(.16,1,.3,1); } .ds-dock a:hover { background: rgba(255,244,230,.12); } .ds-dock a[aria-current='true'] { background: rgba(255,244,230,.16); } .ds-dock a.ds-dock-resume { background: #ddba78; color: #0b0806; font-weight: 700; } .ds-dock a:focus-visible { outline: 2px solid #fea800; outline-offset: 3px; }"
+    },
+    {
+      "name": "Hero Pane",
+      "kind": "card",
+      "refersTo": "pane",
+      "description": "Smoked glass placard floating beside the portrait; one statement.",
+      "html": "<div class=\"ds-stage\"><div class=\"ds-pane\"><h4>AI engineer</h4><p>Designs multi-agent LLM systems and the servers and boards underneath them.</p></div></div>",
+      "css": ".ds-stage { padding: 28px; background: radial-gradient(50% 80% at 40% 100%, rgba(254,168,0,.6), transparent 70%), #0b0806; } .ds-pane { max-width: 310px; padding: 20px 22px; border-radius: 26px; color: #f6efe6; font-family: 'Hanken Grotesk', sans-serif; background: linear-gradient(180deg, rgba(28,18,10,.42), rgba(28,18,10,.30)); backdrop-filter: blur(14px) saturate(1.8); box-shadow: inset 0 1px .5px rgba(255,255,255,.55), inset 0 -1px 1px rgba(255,255,255,.12), inset 0 0 0 1px rgba(255,240,225,.12), 0 20px 40px -20px rgba(0,0,0,.7); } .ds-pane h4 { margin: 0 0 6px; font-size: 13px; font-weight: 600; color: #e6d6c2; } .ds-pane p { margin: 0; font-size: 17px; line-height: 1.4; font-weight: 500; }"
+    },
+    {
+      "name": "Spec Panel",
+      "kind": "card",
+      "refersTo": "spec-panel",
+      "description": "Glass panel beside each project: bullets with marigold dots, then stack tags.",
+      "html": "<div class=\"ds-stage\"><div class=\"ds-spec\"><ul><li>Finds discrepancies across three financial sources.</li><li>A QA agent analyses the reason behind each one.</li></ul><div class=\"ds-tags\"><span>LangChain</span><span>FastAPI</span><span>Postgres</span></div></div></div>",
+      "css": ".ds-stage { padding: 28px; background: radial-gradient(40% 70% at 0% 30%, rgba(228,96,0,.45), transparent 70%), #0b0806; } .ds-spec { max-width: 420px; padding: 22px 24px; border-radius: 24px; color: #f6efe6; font-family: 'Hanken Grotesk', sans-serif; background: linear-gradient(180deg, rgba(255,244,230,.14), rgba(255,244,230,.05)); backdrop-filter: blur(14px) saturate(1.8); box-shadow: inset 0 1px .5px rgba(255,255,255,.55), inset 0 -1px 1px rgba(255,255,255,.12), inset 0 0 0 1px rgba(255,240,225,.12), 0 20px 40px -20px rgba(0,0,0,.7); } .ds-spec ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; } .ds-spec li { display: grid; grid-template-columns: 22px 1fr; font-size: 16px; line-height: 1.45; } .ds-spec li::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #fea800; margin-top: 9px; } .ds-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255,244,230,.1); } .ds-tags span { font-family: 'Spline Sans Mono', monospace; font-size: 12.5px; color: #cdbfae; padding: 4px 10px; border-radius: 999px; background: rgba(255,244,230,.07); }"
+    },
+    {
+      "name": "Link Pill",
+      "kind": "chip",
+      "refersTo": "link-pill",
+      "description": "Repository / Live site / certificate links; outline-only when pending.",
+      "html": "<div class=\"ds-row\"><a class=\"ds-link\" href=\"#\">Repository</a><a class=\"ds-link\" href=\"#\">Live site</a><span class=\"ds-link ds-link-pending\">Repository link pending</span></div>",
+      "css": ".ds-row { display: flex; gap: 8px; flex-wrap: wrap; padding: 24px; background: #0b0806; font-family: 'Hanken Grotesk', sans-serif; } .ds-link { display: inline-flex; align-items: center; gap: 7px; color: #f6efe6; text-decoration: none; font-weight: 600; font-size: 14.5px; padding: 8px 14px; border-radius: 999px; background: rgba(255,244,230,.08); transition: background .25s cubic-bezier(.16,1,.3,1); } .ds-link:hover { background: rgba(255,244,230,.18); } .ds-link:focus-visible { outline: 2px solid #fea800; outline-offset: 3px; } .ds-link-pending { color: #9d8e7d; background: transparent; box-shadow: inset 0 0 0 1px #3a2c21; }"
+    },
+    {
+      "name": "Slide Title",
+      "kind": "custom",
+      "refersTo": "headline",
+      "description": "Keynote-scale headline with one marigold clause.",
+      "html": "<div class=\"ds-slide\"><h2>Agents that <em>do the work.</em></h2><p>Three builds: two agent systems and one device server.</p></div>",
+      "css": ".ds-slide { padding: 40px 28px; background: #0b0806; font-family: 'Hanken Grotesk', sans-serif; color: #f6efe6; } .ds-slide h2 { margin: 0 0 18px; font-size: 64px; font-weight: 800; letter-spacing: -.04em; line-height: .9; } .ds-slide em { font-style: normal; color: #fea800; } .ds-slide p { margin: 0; font-size: 22px; line-height: 1.35; color: #cdbfae; max-width: 34ch; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Lit Stage",
+    "overview": "The site is a dark keynote stage where the only light source is the subject. The saffron of Suprava's shirt spills outward into a warm pool. Everything else sits in shadow: the type, the panels, the navigation. Each section is a slide that holds one idea at keynote scale. Huge, tightly set grotesk headlines sit in silence, with generous dark space above them.\n\nThe interface is tactile, liquid glass. Panes, the dock and spec panels behave like thick, physical lenses. They have a bright rim, a light that follows the pointer across their surface, and, in Chromium, real refraction that bends the stage light behind them. The glass has a job: it holds content in front of the light without hiding it. It never decorates an empty area.\n\nThe light is warm and comes from the photo, never from a neon source. This is not neon cyberpunk: no cyan, violet or electric-blue glow, no glowing edges on black, no scanlines.",
+    "keyCharacteristics": [
+      "A near-black warm stage, with saffron and marigold light rising from below the portrait",
+      "The portrait as the hero object, standing in front of a giant name set behind it",
+      "Keynote-scale grotesk type (800 weight, −0.04em tracking), one idea per slide",
+      "Tactile Liquid Glass: rim highlights, pointer-tracked light, edge refraction",
+      "Brass reserved for the one action that matters: resume or email",
+      "A fixed glass dock as the only navigation"
+    ],
+    "rules": [
+      { "name": "The One Light Rule", "body": "All colour on the page is light from a single warm source below the subject. Gradients are radial and rise from the bottom; nothing glows from the side or in a cool hue.", "section": "colors" },
+      { "name": "The Brass Is Earned Rule", "body": "Brass marks only the resume download and the email action. A third brass element on screen means one of them is wrong.", "section": "colors" },
+      { "name": "The Slide Silence Rule", "body": "A headline gets more empty space above it than below it, and nothing competes with it in its row. One idea per slide.", "section": "typography" },
+      { "name": "The Mono Is Data Rule", "body": "Mono sets dates, grades and technology names, nothing else. It never sets headings or paragraphs to look \"technical\".", "section": "typography" },
+      { "name": "The Lens Rule", "body": "Every glass surface must sit over something worth seeing (stage light, the portrait, type). Glass over a flat black area is decoration, and isn't allowed.", "section": "elevation" },
+      { "name": "The Refraction Is a Bonus Rule", "body": "Edge refraction (an SVG displacement map through backdrop-filter: url()) only runs in Chromium. Every glass surface must look finished with blur, saturation and rim alone.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep all light warm and rising from below: radial saffron, marigold and ember on stage black.",
+      "Do give every glass surface the full recipe: translucent fill, blur 14px with saturation 1.8, the rim stack, the float shadow and the pointer highlight. Add the dark tint wherever it sits over the bright portrait or white type.",
+      "Do keep brass for the resume and email actions only.",
+      "Do set slide titles at 800 weight with −0.04em tracking, and allow at most one marigold clause in them.",
+      "Do keep text on glass at WCAG AA (4.5:1 body, 3:1 large), and use the solid stage-raised fallback when transparency is reduced.",
+      "Do self-host Hanken Grotesk and Spline Sans Mono in production."
+    ],
+    "donts": [
+      "Don't go neon cyberpunk: no cyan, violet or electric-blue glows, no glowing edges on black, no scanlines or grid floors.",
+      "Don't put glass over empty black or use it as a card grid; glass is a lens, so it needs something behind it.",
+      "Don't add a third brass element, or use brass for decoration.",
+      "Don't use mono for headings, paragraphs or a \"hacker\" feel; it's for data only.",
+      "Don't crop the portrait into a circle or other geometric mask. It stays a transparent cut-out standing on the stage.",
+      "Don't use pure black (#000) or neutral greys. Every neutral is warm-tinted.",
+      "Don't track type tighter than −0.04em."
+    ]
+  }
+}
