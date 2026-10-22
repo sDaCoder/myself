@@ -1,0 +1,13 @@
+---
+interface Props {
+	items: string[];
+	/** A hairline above the tags, as inside a spec panel. */
+	divided?: boolean;
+}
+
+const { items, divided = false } = Astro.props;
+---
+
+<div class:list={['flex flex-wrap gap-1.5', divided && 'mt-[18px] border-t border-[rgb(255_244_230/.1)] pt-4']}>
+	{items.map((item) => <span class="rounded-full bg-[rgb(255_244_230/.07)] px-2.5 py-1 font-mono text-[12.5px] text-ivory-muted">{item}</span>)}
+</div>

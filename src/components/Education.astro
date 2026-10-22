@@ -1,0 +1,53 @@
+---
+import Slide from './Slide.astro';
+
+/** `note` follows the years: after a dot on the desktop stage, in brackets on smaller screens. */
+const rows: { programme: string; institution: string; years: string; note?: string; grade: string }[] = [
+	{ programme: 'B.Tech, Computer Science & Engineering', institution: 'IEM, Kolkata', years: '2023 – 2027', note: '6th sem', grade: '8.93 / 10' },
+	{ programme: 'BS, Electronics Systems Engineering', institution: 'IIT Madras', years: '2023 – 2027', note: 'to Diploma', grade: '7.9 / 10' },
+	{ programme: 'Class XII', institution: 'Nava Nalanda', years: '2023', grade: '82.6%' },
+	{ programme: 'Class X', institution: 'Nava Nalanda', years: '2021', grade: '88.42%' },
+	{ programme: 'JEE Main', institution: 'Qualified JEE Advanced', years: '2023', grade: '92 percentile' },
+	{ programme: 'WBJEE', institution: 'All India Rank', years: '2023', grade: 'AIR 3776' },
+];
+
+const cell = 'border-b border-[rgb(255_244_230/.09)] px-2.5 py-[18px] text-left align-baseline';
+---
+
+<Slide id="education" title="Two degrees," accent="in parallel.">
+	<!-- On phones the table scrolls sideways inside its glass, never the page. The glass stays put
+	     and an inner wrapper scrolls, so the rim and specular light cover the whole panel. -->
+	<div class="lg reveal overflow-hidden rounded-table">
+		<div class="overflow-x-auto px-3 py-1 stage:px-[26px] stage:py-2" tabindex="0" role="region" aria-labelledby="education-h">
+		<table class="w-full min-w-[560px] border-collapse">
+			<thead>
+				<tr>
+					{['Programme', 'Institution', 'Years', 'Grade'].map((h) => (
+						<th scope="col" class:list={[cell, 'pt-5 text-[12.5px] font-semibold tracking-[.04em] text-ivory-faint']}>{h}</th>
+					))}
+				</tr>
+			</thead>
+			<tbody>
+				{
+					rows.map((row) => (
+						<tr class="[&:last-child>td]:border-b-0">
+							<td class:list={[cell, 'text-lg font-bold']}>{row.programme}</td>
+							<td class:list={[cell, 'text-ivory-muted']}>{row.institution}</td>
+							<td class:list={[cell, 'text-ivory-muted']}>
+								{row.years}
+								{row.note && (
+									<>
+										<span class="max-stage:hidden"> · {row.note}</span>
+										<span class="stage:hidden"> ({row.note})</span>
+									</>
+								)}
+							</td>
+							<td class:list={[cell, 'font-mono text-[17px] whitespace-nowrap text-marigold']}>{row.grade}</td>
+						</tr>
+					))
+				}
+			</tbody>
+		</table>
+		</div>
+	</div>
+</Slide>

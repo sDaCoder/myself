@@ -1,0 +1,37 @@
+---
+import Icon from './Icon.astro';
+
+const sections = [
+	{ id: 'projects', label: 'Projects' },
+	{ id: 'experience', label: 'Experience' },
+	{ id: 'education', label: 'Education', wideOnly: true },
+	{ id: 'skills', label: 'Skills' },
+	{ id: 'contact', label: 'Contact', wideOnly: true },
+];
+
+const pill =
+	'inline-flex min-h-10 items-center gap-2 whitespace-nowrap rounded-full py-2.5 font-semibold no-underline transition-colors duration-300 ease-out-expo px-[11px] text-[13.5px] max-[380px]:px-2 max-[380px]:text-[13px] stage:px-4 stage:text-[14.5px]';
+---
+
+<nav
+	class="dock lg fixed bottom-[max(12px,env(safe-area-inset-bottom))] left-1/2 z-50 flex max-w-[calc(100%-20px)] -translate-x-1/2 items-center rounded-full bg-[linear-gradient(180deg,rgb(24_15_9/.62),rgb(24_15_9/.5))] p-1.5 stage:bottom-[max(18px,env(safe-area-inset-bottom))] stage:max-w-none stage:gap-1"
+	aria-label="Sections"
+>
+	{
+		sections.map(({ id, label, wideOnly }) => (
+			<a
+				href={`#${id}`}
+				class:list={[pill, 'text-ivory hover:bg-[rgb(255_244_230/.12)] aria-[current=true]:bg-[rgb(255_244_230/.16)]', wideOnly && 'max-stage:hidden']}
+			>
+				{label}
+			</a>
+		))
+	}
+	<a
+		class:list={[pill, 'bg-brass font-bold text-stage hover:bg-brass-lit']}
+		href={`${import.meta.env.BASE_URL}suprava-dutta-resume.pdf`}
+		download
+	>
+		<Icon name="download" class="max-[359px]:hidden" />Resume
+	</a>
+</nav>

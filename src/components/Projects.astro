@@ -1,0 +1,82 @@
+---
+import LinkPill, { type Link } from './LinkPill.astro';
+import Slide from './Slide.astro';
+import Stack from './Stack.astro';
+
+interface Project {
+	name: string;
+	summary: string;
+	links: Link[];
+	points: string[];
+	stack: string[];
+	/** A soft stage-light glow behind the row. */
+	glow?: 'saffron-left' | 'marigold-right';
+}
+
+const projects: Project[] = [
+	{
+		name: 'Recon AI',
+		summary: 'Reconciles merchant transactions, payment-provider settlements and bank statements, then explains every mismatch.',
+		links: [
+			{ label: 'Repository', icon: 'code', href: 'https://github.com/sDaCoder/reconai' },
+			{ label: 'Live site', icon: 'arrow', href: 'https://reconai-one.vercel.app/' },
+		],
+		points: ['Finds discrepancies across three financial sources.', 'A QA agent analyses the reason behind each discrepancy.'],
+		stack: ['LangChain', 'FastAPI', 'Postgres', 'OpenAI'],
+		glow: 'saffron-left',
+	},
+	{
+		name: 'CurioGenius AI',
+		summary: 'A business development pod: four agents (business, designer, developer, testing) working one brief.',
+		links: [{ label: 'Repository', icon: 'code', href: 'https://github.com/sDaCoder/business-development-pod' }],
+		points: ['Vector search maintains the user persona.', 'AWS DynamoDB integration, with the FastAPI backend deployed on AWS EC2.'],
+		stack: ['Multi-agent', 'Vector search', 'FastAPI', 'DynamoDB', 'AWS EC2'],
+	},
+	{
+		name: 'Smart Home Server',
+		summary: 'An IoT web server for home appliances, with an ESP32 acting as the Wi-Fi access point.',
+		// The resume's repo link looks wrong (PRODUCT.md); keep it pending until confirmed.
+		links: [{ label: 'Repository link pending', icon: 'code' }],
+		points: [
+			'Node.js backend controlling appliances remotely.',
+			'MQTT protocol for bidirectional communication.',
+			'JWT-based user authentication for verified API access.',
+		],
+		stack: ['ESP32', 'MQTT', 'Node.js', 'JWT'],
+		glow: 'marigold-right',
+	},
+];
+---
+
+<Slide id="projects" title="Agents that" accent="do the work." lead="Three builds: two agent systems and one device server.">
+	{
+		projects.map((project) => (
+			<article class="reveal relative grid grid-cols-1 items-start gap-[clamp(24px,5vw,80px)] border-t border-hairline py-11 stage:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
+				{project.glow && (
+					<div
+						class:list={[
+							'pointer-events-none absolute -z-[1] size-[520px] rounded-full opacity-[.32] blur-[80px]',
+							project.glow === 'saffron-left' ? '-left-[180px] -top-[60px] bg-saffron' : '-right-[200px] -top-10 bg-marigold',
+						]}
+						aria-hidden="true"
+					/>
+				)}
+				<div>
+					<h3 class="m-0 text-[clamp(38px,5vw,72px)] leading-[.95] font-extrabold tracking-[-.04em]">{project.name}</h3>
+					<p class="mt-3.5 mb-0 max-w-[36ch] text-[clamp(18px,1.6vw,22px)] leading-[1.4] text-ivory-muted">{project.summary}</p>
+					<div class="mt-[18px] flex flex-wrap gap-2">
+						{project.links.map((link) => <LinkPill {...link} />)}
+					</div>
+				</div>
+				<div class="lg rounded-panel px-6 py-[22px]">
+					<ul class="m-0 grid list-none gap-3 p-0">
+						{project.points.map((point) => (
+							<li class="spec-dot grid grid-cols-[22px_1fr] gap-1.5 text-base leading-[1.45] text-ivory">{point}</li>
+						))}
+					</ul>
+					<Stack items={project.stack} divided />
+				</div>
+			</article>
+		))
+	}
+</Slide>

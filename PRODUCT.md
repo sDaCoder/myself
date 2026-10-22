@@ -52,10 +52,10 @@ A single engineer's own record of their AI/ML/data work, made distinct by a visu
 
 ### Identity and profiles
 
-- **Email:** supravadutta.nnhs.kol.e2321@gmail.com
+- **Email:** supravadutta.nnhs.kol.e2321+portfolio@gmail.com (site address since 2026-10-22; Gmail plus-alias of the resume address)
 - **GitHub:** https://github.com/sDaCoder
 - **LinkedIn:** https://www.linkedin.com/in/suprava-dutta-sda-e23
-- **LeetCode:** https://leetcode.com/u/sda_e23/ (300+ problems solved)
+- **LeetCode:** https://leetcode.com/u/sda_e23/ (350+ problems solved; updated by Suprava 2026-10-22, the resume PDF still says 300+)
 - **Phone:** it's on the resume, but **keep it off the site** unless the user asks for it.
 
 ### Education

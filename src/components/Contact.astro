@@ -1,0 +1,51 @@
+---
+import Icon, { type IconName } from './Icon.astro';
+
+const email = 'supravadutta.nnhs.kol.e2321+portfolio@gmail.com';
+
+const profiles: { label: string; icon: IconName; href: string }[] = [
+	{ label: 'GitHub', icon: 'github', href: 'https://github.com/sDaCoder' },
+	{ label: 'LinkedIn', icon: 'linkedin', href: 'https://www.linkedin.com/in/suprava-dutta-sda-e23' },
+	{ label: 'LeetCode', icon: 'code', href: 'https://leetcode.com/u/sda_e23/' },
+];
+
+const btn =
+	'inline-flex min-h-11 items-center gap-[9px] whitespace-nowrap rounded-full px-[22px] py-[13px] text-[15.5px] font-bold no-underline transition-[background,translate,color] duration-300 ease-out-expo';
+---
+
+<section
+	id="contact"
+	class="relative mt-[clamp(80px,10vw,140px)] overflow-hidden px-5 pt-[clamp(110px,16vw,220px)] pb-[140px] text-center"
+	aria-labelledby="contact-h"
+>
+	<div
+		class="pointer-events-none absolute inset-0 bg-[radial-gradient(50%_60%_at_50%_100%,rgb(228_96_0/.5),transparent_70%),radial-gradient(30%_40%_at_50%_100%,rgb(254_168_0/.5),transparent_70%)]"
+		aria-hidden="true"
+	>
+	</div>
+	<h2 id="contact-h" class="relative m-0 text-[clamp(60px,12vw,200px)] leading-[.86] font-extrabold tracking-[-.04em]">
+		Let's build<br />something.
+	</h2>
+	<p class="relative mx-auto mt-[22px] mb-[34px] max-w-[40ch] text-[clamp(18px,1.6vw,22px)] text-ivory-muted">
+		Open to AI, ML and backend engineering roles. Also on LeetCode with 350+ problems solved.
+	</p>
+	<div class="relative flex flex-wrap justify-center gap-2.5">
+		<a class:list={[btn, 'bg-brass text-stage hover:-translate-y-px hover:bg-brass-lit']} href={`mailto:${email}`}>
+			<Icon name="mail" />Email me
+		</a>
+		{
+			profiles.map((p) => (
+				<a class:list={['lg', btn, 'text-ivory hover:bg-none hover:bg-[rgb(255_244_230/.18)]']} href={p.href} target="_blank" rel="noopener">
+					<Icon name={p.icon} />
+					{p.label}
+				</a>
+			))
+		}
+	</div>
+	<a class="relative mt-[26px] inline-block font-mono text-[clamp(13px,1.4vw,16px)] [overflow-wrap:anywhere] text-ivory-muted" href={`mailto:${email}`}>
+		{email}
+	</a>
+	<div class="relative mt-20 flex justify-center gap-[22px] text-[13.5px] text-ivory-faint">
+		<span>© 2026 Suprava Dutta</span><span>Kolkata</span>
+	</div>
+</section>

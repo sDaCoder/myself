@@ -1,0 +1,22 @@
+---
+interface Props {
+	id: string;
+	title: string;
+	/** The one marigold clause a slide title may carry. */
+	accent?: string;
+	lead?: string;
+}
+
+const { id, title, accent, lead } = Astro.props;
+---
+
+<section id={id} class="relative mx-auto w-[min(1200px,100%-40px)] pt-[clamp(90px,14vw,180px)]" aria-labelledby={`${id}-h`}>
+	<h2
+		id={`${id}-h`}
+		class="reveal m-0 mb-[clamp(36px,5vw,64px)] text-[clamp(52px,9vw,140px)] leading-[.9] font-extrabold tracking-[-.04em]"
+	>
+		{title}{accent && <> <em class="text-marigold not-italic">{accent}</em></>}
+	</h2>
+	{lead && <p class="reveal -mt-6 mb-14 max-w-[34ch] text-[clamp(20px,2vw,26px)] leading-[1.35] text-ivory-muted">{lead}</p>}
+	<slot />
+</section>

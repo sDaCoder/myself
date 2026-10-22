@@ -1,0 +1,34 @@
+---
+import Icon, { type IconName } from './Icon.astro';
+
+export interface Link {
+	label: string;
+	icon: IconName;
+	/** No href means the link is pending: an outline pill that can't be clicked. */
+	href?: string;
+}
+
+type Props = Link;
+
+const { label, icon, href } = Astro.props;
+const pill = 'inline-flex min-h-10 items-center gap-[7px] rounded-full px-3.5 py-2 text-[14.5px] font-semibold no-underline';
+---
+
+{
+	href ? (
+		<a
+			class:list={[pill, 'bg-[rgb(255_244_230/.08)] transition-colors duration-[250ms] ease-out-expo hover:bg-[rgb(255_244_230/.18)]']}
+			href={href}
+			target="_blank"
+			rel="noopener"
+		>
+			<Icon name={icon} />
+			{label}
+		</a>
+	) : (
+		<span class:list={[pill, 'text-ivory-faint shadow-[inset_0_0_0_1px_#3a2c21]']} aria-disabled="true">
+			<Icon name={icon} />
+			{label}
+		</span>
+	)
+}

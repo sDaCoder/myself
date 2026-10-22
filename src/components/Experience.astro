@@ -1,0 +1,71 @@
+---
+import LinkPill, { type Link } from './LinkPill.astro';
+import Slide from './Slide.astro';
+import Stack from './Stack.astro';
+
+interface Role {
+	when: string;
+	title: string;
+	org: string;
+	orgHref?: string;
+	summary: string;
+	stack: string[];
+	links: Link[];
+}
+
+const roles: Role[] = [
+	{
+		when: 'JUN – SEP 2026',
+		title: 'AI Development Intern',
+		org: 'Remote Programmer Private Limited',
+		orgHref: 'https://remoteprogrammer.com/',
+		summary:
+			'Architected the end-to-end design of a multi-agent conversational AI assistant for a U.S.-based client, specifying multi-agent orchestration and intent routing, with agents built on LangChain and LangGraph.',
+		stack: ['LangChain', 'LangGraph', 'RAG', 'BM25', 'Redis', 'Jira'],
+		links: [
+			{ label: 'Offer letter', icon: 'file', href: 'https://drive.google.com/file/d/1i9zXse0AQ8ZyCzLN63xl8NGdoBtRpndp/view' },
+			{ label: 'Completion certificate', icon: 'file', href: 'https://drive.google.com/file/d/1sGFCmk3e9eTHVFZ8ev960g6TlfD1Uuhf/view' },
+		],
+	},
+	{
+		when: '2024',
+		title: 'Web Administrator',
+		org: 'Ramanujan Society of Research, IIT Madras',
+		summary: "Redesigned and upgraded the society's website, and managed its ongoing maintenance.",
+		stack: ['React', 'Figma'],
+		links: [
+			{ label: 'Live website', icon: 'arrow', href: 'https://rasoriitm.vercel.app/' },
+			{ label: 'Certificate', icon: 'file', href: 'https://drive.google.com/file/d/1KMc1hyiZEPKC6MI4m-3OfpUkt9tYo9ah/view' },
+		],
+	},
+];
+---
+
+<Slide id="experience" title="Experience.">
+	<div class="grid gap-[18px]">
+		{
+			roles.map((role) => (
+				<article class="reveal grid grid-cols-1 gap-1.5 border-t border-hairline py-[30px] stage:grid-cols-[210px_minmax(0,1fr)] stage:gap-7">
+					<div class="pt-2.5 font-mono text-sm text-marigold">{role.when}</div>
+					<div>
+						<h3 class="m-0 text-[clamp(28px,3.2vw,44px)] leading-[1.02] font-extrabold tracking-[-.03em]">{role.title}</h3>
+						<p class="mt-2 mb-3.5 font-medium text-ivory-muted">
+							{role.orgHref ? (
+								<a href={role.orgHref} target="_blank" rel="noopener">
+									{role.org}
+								</a>
+							) : (
+								role.org
+							)}
+						</p>
+						<p class="m-0 mb-[18px] max-w-[62ch] text-ivory">{role.summary}</p>
+						<Stack items={role.stack} />
+						<div class="mt-[18px] flex flex-wrap gap-2">
+							{role.links.map((link) => <LinkPill {...link} />)}
+						</div>
+					</div>
+				</article>
+			))
+		}
+	</div>
+</Slide>
