@@ -1,1 +1,120 @@
 @import "tailwindcss";
+
+/* Tokens from DESIGN.md. One breakpoint: "stage" is the desktop stage (>900px). */
+@theme {
+  --breakpoint-stage: 901px;
+
+  --color-stage: #0b0806;
+  --color-stage-raised: #15100c;
+  --color-hairline: #2c2119;
+  --color-ivory: #f6efe6;
+  --color-ivory-muted: #cdbfae;
+  --color-ivory-faint: #9d8e7d;
+  --color-saffron: #e46000;
+  --color-marigold: #fea800;
+  --color-ember: #c54d01;
+  --color-brass: #ddba78;
+  --color-brass-lit: #e9cc93;
+
+  --font-sans: var(--font-hanken), ui-sans-serif, sans-serif;
+  --font-mono: var(--font-spline-mono), ui-monospace, monospace;
+
+  --ease-out-expo: cubic-bezier(.16, 1, .3, 1);
+
+  --radius-pane-sm: 20px;
+  --radius-card: 22px;
+  --radius-panel: 24px;
+  --radius-pane: 26px;
+  --radius-table: 28px;
+}
+
+/* Landscape phones: too short for the stacked phone hero, too narrow for the desktop stage. */
+@custom-variant short (@media (max-height: 500px) and (orientation: landscape));
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scrollbar-color: #4a3524 var(--color-stage);
+  }
+  body {
+    margin: 0;
+    background: var(--color-stage);
+    color: var(--color-ivory);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    font-variant-numeric: tabular-nums;
+  }
+  /* Glows spill past the gutters by design; clip them here, since overflow on body
+     propagates to the viewport and mobile browsers still widen the layout for it. */
+  main { overflow-x: clip; }
+  ::selection { background: var(--color-marigold); color: var(--color-stage); }
+  :focus-visible { outline: 2px solid var(--color-marigold); outline-offset: 3px; border-radius: 8px; }
+  a { color: inherit; text-underline-offset: .22em; }
+  /* no stragglers: headings break into even lines, prose never ends on a lone word */
+  h1, h2, h3 { text-wrap: balance; }
+  p, li, td { text-wrap: pretty; }
+  img { display: block; max-width: 100%; }
+}
+
+@layer components {
+  .icon {
+    width: 18px; height: 18px; flex: none;
+    fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  /* ---------- Liquid Glass ----------
+     A translucent lens with a bright rim and specular light that follows the pointer.
+     Chromium additionally refracts the backdrop through an edge displacement map (src/scripts/stage.ts). */
+  .lg {
+    position: relative; isolation: isolate;
+    background: linear-gradient(180deg, rgb(255 244 230 / .14), rgb(255 244 230 / .05));
+    -webkit-backdrop-filter: blur(14px) saturate(1.8) brightness(1.05);
+    backdrop-filter: blur(14px) saturate(1.8) brightness(1.05);
+    box-shadow:
+      inset 0 1px 0.5px rgb(255 255 255 / .55),
+      inset 0 -1px 1px rgb(255 255 255 / .12),
+      inset 0 0 0 1px rgb(255 240 225 / .12),
+      0 20px 40px -20px rgb(0 0 0 / .7);
+  }
+  .lg::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: -1;
+    background: radial-gradient(60% 120% at var(--sx, 30%) var(--sy, 0%), rgb(255 255 255 / .16), transparent 60%);
+  }
+  .lg.refract {
+    -webkit-backdrop-filter: var(--refract) saturate(1.8) brightness(1.05);
+    backdrop-filter: var(--refract) saturate(1.8) brightness(1.05);
+  }
+
+  /* the surname, set as an outline behind the portrait */
+  .name-outline { color: transparent; -webkit-text-stroke: 1.5px rgb(246 239 230 / .55); }
+
+  /* marigold dots on spec lists */
+  .spec-dot::before {
+    content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--color-marigold); margin-top: 9px;
+  }
+}
+
+/* Unlayered so it beats per-surface tints set with utilities. */
+@media (prefers-reduced-transparency: reduce) {
+  .lg, .lg.refract {
+    background: var(--color-stage-raised);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* Arrival, once per load: the stage light comes up, the name settles out of blur. */
+@media (prefers-reduced-motion: no-preference) {
+  .arrive-light { animation: lights 2.2s var(--ease-out-expo) both; }
+  .arrive-name { animation: settle 1.6s var(--ease-out-expo) .25s both; }
+  .arrive-portrait { animation: rise 1.4s var(--ease-out-expo) .1s both; }
+  .arrive-pane { animation: settle 1.2s var(--ease-out-expo) .9s both; }
+  .reveal { transition: opacity 1s var(--ease-out-expo), filter 1s var(--ease-out-expo), transform 1s var(--ease-out-expo); }
+  .js .reveal:not(.in) { opacity: .001; filter: blur(12px); transform: translateY(18px); }
+}
+@keyframes lights { from { opacity: 0; transform: scale(.9); } }
+@keyframes settle { from { opacity: 0; filter: blur(18px); transform: translateY(14px); } }
+/* the portrait is centred with the `translate` property, so this only adds the rise */
+@keyframes rise { from { opacity: 0; transform: translateY(30px); } }

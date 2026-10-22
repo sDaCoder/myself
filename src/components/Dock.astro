@@ -1,0 +1,52 @@
+---
+import { Image } from 'astro:assets';
+import projects from '../assets/dock/projects.png';
+import experience from '../assets/dock/experience.png';
+import education from '../assets/dock/education.png';
+import skills from '../assets/dock/skills.png';
+import contact from '../assets/dock/contact.png';
+import resume from '../assets/dock/resume.png';
+
+const sections: { id: string; label: string; icon: ImageMetadata; wideOnly?: boolean }[] = [
+	{ id: 'projects', label: 'Projects', icon: projects },
+	{ id: 'experience', label: 'Experience', icon: experience },
+	{ id: 'education', label: 'Education', icon: education, wideOnly: true },
+	{ id: 'skills', label: 'Skills', icon: skills },
+	{ id: 'contact', label: 'Contact', icon: contact, wideOnly: true },
+];
+
+// an app icon with its name below; on desktop the icon scales with the window height (up to the contact socials' 92px)
+// so the dock leaves at least 70% of the hero portrait in view (min width keeps a short label like "Skills" from squeezing the icon), like the macOS dock; the icon lifts on hover and grows for the current section
+const tile =
+	'group flex min-w-12 flex-col items-center gap-0.5 rounded-[14px] px-1 pt-1.5 pb-1 no-underline transition-colors duration-300 ease-out-expo min-[400px]:min-w-14 min-[400px]:px-1.5 stage:min-w-[76px] stage:gap-1 stage:rounded-[18px] stage:px-2 stage:pt-2';
+const icon =
+	'size-[clamp(40px,11vw,56px)] origin-bottom transition-[scale,translate] duration-300 ease-out-expo motion-safe:group-hover:-translate-y-0.5 stage:size-[clamp(48px,calc(14vh-64px),92px)]';
+const name =
+	'text-[10px] leading-tight font-semibold whitespace-nowrap text-ivory-muted transition-colors duration-300 group-hover:text-ivory stage:text-[11.5px]';
+---
+
+<!-- corner radius is concentric with the tiles: tile radius plus the dock's padding -->
+<nav
+	class="dock lg fixed bottom-[max(12px,env(safe-area-inset-bottom))] left-1/2 z-50 flex max-w-[calc(100%-20px)] -translate-x-1/2 items-stretch rounded-[20px] bg-[linear-gradient(180deg,rgb(24_15_9/.62),rgb(24_15_9/.5))] p-1.5 stage:bottom-[max(18px,env(safe-area-inset-bottom))] stage:max-w-none stage:gap-1 stage:rounded-[24px] stage:p-1.5"
+	aria-label="Sections"
+>
+	{
+		sections.map(({ id, label, icon: src, wideOnly }) => (
+			<a href={`#${id}`} class:list={[tile, 'hover:bg-[rgb(255_244_230/.08)]', wideOnly && 'max-[379px]:hidden']}>
+				<Image src={src} alt="" widths={[80, 160, 240]} sizes="(min-width: 901px) 92px, 56px" class:list={[icon, 'group-aria-[current=true]:scale-[1.15]']} />
+				<span class:list={[name, 'group-aria-[current=true]:text-ivory']}>{label}</span>
+			</a>
+		))
+	}
+	<span class="mx-0.5 my-2 w-px shrink-0 bg-[rgb(255_244_230/.14)] stage:mx-1" aria-hidden="true"></span>
+	<a
+		class:list={[tile, 'hover:bg-[rgb(255_244_230/.08)]']}
+		href={`${import.meta.env.BASE_URL}suprava-dutta-resume.pdf`}
+		target="_blank"
+		rel="noopener"
+		aria-label="Resume (PDF, opens in a new tab)"
+	>
+		<Image src={resume} alt="" widths={[80, 160, 240]} sizes="(min-width: 901px) 92px, 56px" class={icon} />
+		<span class:list={[name, 'text-ivory']}>Resume</span>
+	</a>
+</nav>

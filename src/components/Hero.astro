@@ -1,0 +1,60 @@
+---
+import { Picture } from 'astro:assets';
+import portrait from '../assets/suprava-portrait.png';
+
+const pane =
+	'lg arrive-pane absolute z-[4] rounded-pane-sm bg-[linear-gradient(180deg,rgb(28_18_10/.42),rgb(28_18_10/.30))] px-4 py-3.5 stage:w-[min(310px,26vw)] stage:rounded-pane stage:px-[22px] stage:py-5';
+const paneLabel = 'mb-1.5 text-[13px] font-semibold tracking-[.02em] text-ivory-muted';
+const paneText = 'm-0 text-[15.5px] leading-[1.4] font-medium stage:text-[17px]';
+---
+
+<section class="relative h-svh min-h-[520px] overflow-hidden stage:min-h-[640px] short:min-h-[400px]" aria-labelledby="hero-name">
+	<div
+		class="arrive-light pointer-events-none absolute -inset-x-[10%] -top-[10%] bottom-0 bg-[radial-gradient(42%_50%_at_50%_78%,rgb(254_168_0/.55),transparent_70%),radial-gradient(60%_60%_at_50%_90%,rgb(228_96_0/.45),transparent_75%),radial-gradient(90%_70%_at_50%_100%,rgb(197_77_1/.30),transparent_80%)]"
+		aria-hidden="true"
+	>
+	</div>
+
+	<h1
+		id="hero-name"
+		class="arrive-name absolute inset-x-0 top-[13%] z-[1] m-0 text-center text-[clamp(60px,21vw,150px)] leading-[.82] font-extrabold tracking-[-.04em] text-ivory stage:top-[11%] stage:text-[clamp(64px,15.5vw,250px)] short:top-[8%] short:text-[clamp(56px,22svh,110px)]"
+	>
+		<span class="block">Suprava</span>
+		<span class="name-outline block">Dutta</span>
+	</h1>
+
+	<!-- Desktop: hung from the name so the head overlaps the bottom ~40% of "Dutta" at any size
+	     (11% name offset + two .82 lines, less the baseline gap, 40% of the cap height and the PNG's headroom). -->
+	<Picture
+		src={portrait}
+		formats={['avif', 'webp']}
+		fallbackFormat="webp"
+		widths={[480, 720, 1000, portrait.width]}
+		sizes="(min-width: 901px) 66vh, 52vh"
+		loading="eager"
+		fetchpriority="high"
+		class="arrive-portrait absolute bottom-[9%] left-1/2 z-[2] h-[58%] max-h-[1548px] w-auto max-w-none -translate-x-1/2 drop-shadow-[0_-10px_60px_rgb(254_168_0/.25)] [@media(max-height:640px)_and_(orientation:portrait)]:bottom-[3%] [@media(max-height:640px)_and_(orientation:portrait)]:h-[66%] short:bottom-0 stage:bottom-0 stage:h-[74%] [@media(min-width:901px)_and_(min-height:501px)]:bottom-auto [@media(min-width:901px)_and_(min-height:501px)]:h-[64%] [@media(min-width:901px)_and_(min-height:501px)]:top-[calc(9.85%_+_clamp(64px,15.5vw,250px)_*_1.28)]"
+		alt="Suprava Dutta in an orange t-shirt, arms folded on a table, wearing glasses and a gold wristwatch"
+	/>
+
+	<div class:list={[pane, 'inset-x-4 bottom-28 short:right-auto short:w-[min(300px,30vw)] stage:inset-x-auto stage:bottom-auto stage:left-[4%] stage:top-[52%]']}>
+		<h2 class={paneLabel}>AI engineer</h2>
+		<p class={paneText}>
+			Designs multi-agent LLM systems (orchestration, intent routing, retrieval) and the servers and boards underneath them.
+		</p>
+	</div>
+
+	<div class:list={[pane, 'hidden stage:block stage:right-[4%] stage:top-[44%]']}>
+		<h2 class={paneLabel}>Latest</h2>
+		<p class={paneText}>
+			AI Development Intern at <a class="font-bold no-underline" href="https://remoteprogrammer.com/" target="_blank" rel="noopener">Remote Programmer</a>, building a multi-agent assistant for a U.S. client.
+		</p>
+		<span class="mt-2.5 block font-mono text-[12.5px] text-ivory-muted">JUN – SEP 2026</span>
+	</div>
+
+	<div
+		class="pointer-events-none absolute inset-x-0 bottom-0 z-[3] h-[22%] bg-[linear-gradient(180deg,transparent,rgb(11_8_6/.92))]"
+		aria-hidden="true"
+	>
+	</div>
+</section>
