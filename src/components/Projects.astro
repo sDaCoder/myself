@@ -1,5 +1,7 @@
 ---
 import LinkPill, { type Link } from './LinkPill.astro';
+import github from '../assets/social/github.png';
+import safari from '../assets/icons/safari.png';
 import Slide from './Slide.astro';
 import Stack from './Stack.astro';
 
@@ -18,8 +20,8 @@ const projects: Project[] = [
 		name: 'Recon AI',
 		summary: 'Reconciles merchant transactions, payment-provider settlements and bank statements, then explains every mismatch.',
 		links: [
-			{ label: 'Repository', icon: 'code', href: 'https://github.com/sDaCoder/reconai' },
-			{ label: 'Live site', icon: 'arrow', href: 'https://reconai-one.vercel.app/' },
+			{ label: 'Repository', icon: github, href: 'https://github.com/sDaCoder/reconai' },
+			{ label: 'Live website', icon: safari, href: 'https://reconai-one.vercel.app/' },
 		],
 		points: ['Finds discrepancies across three financial sources.', 'A QA agent analyses the reason behind each discrepancy.'],
 		stack: ['LangChain', 'FastAPI', 'Postgres', 'OpenAI'],
@@ -28,7 +30,7 @@ const projects: Project[] = [
 	{
 		name: 'CurioGenius AI',
 		summary: 'A business development pod: four agents (business, designer, developer, testing) working one brief.',
-		links: [{ label: 'Repository', icon: 'code', href: 'https://github.com/sDaCoder/business-development-pod' }],
+		links: [{ label: 'Repository', icon: github, href: 'https://github.com/sDaCoder/business-development-pod' }],
 		points: ['Vector search maintains the user persona.', 'AWS DynamoDB integration, with the FastAPI backend deployed on AWS EC2.'],
 		stack: ['Multi-agent', 'Vector search', 'FastAPI', 'DynamoDB', 'AWS EC2'],
 	},
@@ -36,7 +38,7 @@ const projects: Project[] = [
 		name: 'Smart Home Server',
 		summary: 'An IoT web server for home appliances, with an ESP32 acting as the Wi-Fi access point.',
 		// The resume's repo link looks wrong (PRODUCT.md); keep it pending until confirmed.
-		links: [{ label: 'Repository link pending', icon: 'code' }],
+		links: [{ label: 'Repository', icon: github, href: 'https://github.com/sDaCoder/esp32-server' }],
 		points: [
 			'Node.js backend controlling appliances remotely.',
 			'MQTT protocol for bidirectional communication.',

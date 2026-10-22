@@ -1,21 +1,30 @@
 ---
-import Icon, { type IconName } from './Icon.astro';
+import { Image } from 'astro:assets';
+import github from '../assets/social/github.png';
+import linkedin from '../assets/social/linkedin.png';
+import leetcode from '../assets/social/leetcode.png';
+import instagram from '../assets/social/instagram.png';
+import discord from '../assets/social/discord.png';
+import mail from '../assets/icons/mail.png';
 
-const email = 'supravadutta.nnhs.kol.e2321+portfolio@gmail.com';
+const email = 'supravadutta.official23+portfolio@gmail.com';
 
-const profiles: { label: string; icon: IconName; href: string }[] = [
-	{ label: 'GitHub', icon: 'github', href: 'https://github.com/sDaCoder' },
-	{ label: 'LinkedIn', icon: 'linkedin', href: 'https://www.linkedin.com/in/suprava-dutta-sda-e23' },
-	{ label: 'LeetCode', icon: 'code', href: 'https://leetcode.com/u/sda_e23/' },
+/** Discord has no profile URL for a username (only for the numeric user ID), so it copies the handle instead. */
+const profiles: { label: string; handle: string; href?: string; copy?: string; icon: ImageMetadata }[] = [
+	{ label: 'GitHub', handle: '@sDaCoder', href: 'https://github.com/sDaCoder', icon: github },
+	{ label: 'LinkedIn', handle: 'LinkedIn', href: 'https://www.linkedin.com/in/suprava-dutta-sda-e23', icon: linkedin },
+	{ label: 'LeetCode', handle: '@sda_e23', href: 'https://leetcode.com/u/sda_e23/', icon: leetcode },
+	{ label: 'Instagram', handle: '@sda.e23', href: 'https://www.instagram.com/sda.e23/', icon: instagram },
+	{ label: 'Discord', handle: '@sda_e2023', copy: 'sda_e2023', icon: discord },
 ];
 
-const btn =
-	'inline-flex min-h-11 items-center gap-[9px] whitespace-nowrap rounded-full px-[22px] py-[13px] text-[15.5px] font-bold no-underline transition-[background,translate,color] duration-300 ease-out-expo';
+const tile = 'group flex w-full flex-col items-center gap-1.5 rounded-[14px] stage:gap-2 stage:rounded-[18px] border-0 bg-transparent p-0 text-inherit no-underline cursor-pointer';
+
 ---
 
 <section
 	id="contact"
-	class="relative mt-[clamp(80px,10vw,140px)] overflow-hidden px-5 pt-[clamp(110px,16vw,220px)] pb-[140px] text-center"
+	class="relative mt-[clamp(80px,10vw,140px)] overflow-hidden px-5 pt-[clamp(110px,16vw,220px)] pb-[140px] text-center stage:pb-[190px]"
 	aria-labelledby="contact-h"
 >
 	<div
@@ -29,23 +38,81 @@ const btn =
 	<p class="relative mx-auto mt-[22px] mb-[34px] max-w-[40ch] text-[clamp(18px,1.6vw,22px)] text-ivory-muted">
 		Open to AI, ML and backend engineering roles. Also on LeetCode with 350+ problems solved.
 	</p>
-	<div class="relative flex flex-wrap justify-center gap-2.5">
-		<a class:list={[btn, 'bg-brass text-stage hover:-translate-y-px hover:bg-brass-lit']} href={`mailto:${email}`}>
-			<Icon name="mail" />Email me
-		</a>
-		{
-			profiles.map((p) => (
-				<a class:list={['lg', btn, 'text-ivory hover:bg-none hover:bg-[rgb(255_244_230/.18)]']} href={p.href} target="_blank" rel="noopener">
-					<Icon name={p.icon} />
-					{p.label}
-				</a>
-			))
-		}
-	</div>
-	<a class="relative mt-[26px] inline-block font-mono text-[clamp(13px,1.4vw,16px)] [overflow-wrap:anywhere] text-ivory-muted" href={`mailto:${email}`}>
+	<!-- dock glass, with the Mail icon at the same size as the social icons below; the corner radius is
+	     concentric with the icon tile (tile radius .18 + art margin .1 of the image, plus the padding) -->
+	<a
+		class="lg group inline-flex items-center gap-2.5 whitespace-nowrap rounded-[calc(clamp(40px,11vw,56px)*.28+6px)] bg-[linear-gradient(180deg,rgb(24_15_9/.62),rgb(24_15_9/.5))] py-1.5 pr-7 pl-1.5 text-[17px] font-bold text-ivory no-underline transition-[background] duration-300 ease-out-expo hover:bg-[linear-gradient(180deg,rgb(40_26_16/.66),rgb(40_26_16/.54))] stage:gap-3.5 stage:rounded-[34px] stage:py-2 stage:pr-9 stage:pl-2 stage:text-xl"
+		href={`mailto:${email}`}
+	>
+		<Image
+			src={mail}
+			alt=""
+			widths={[80, 160, 240]}
+			sizes="(min-width: 901px) 92px, 56px"
+			class="size-[clamp(40px,11vw,56px)] transition-[translate] duration-500 ease-out-expo motion-safe:group-hover:-translate-y-0.5 stage:size-[92px]"
+		/>Email me
+	</a>
+	<a class="relative mt-[22px] block font-mono text-[clamp(13px,1.4vw,16px)] [overflow-wrap:anywhere] text-ivory-muted" href={`mailto:${email}`}>
 		{email}
 	</a>
+	<!-- the app icons carry their own rounded tile, so each link is just the icon and its handle; the row sits in dock glass and stays on one line on phones -->
+	<ul class="lg mx-auto mt-14 flex w-full max-w-[440px] list-none justify-center gap-x-0 rounded-[24px] bg-[linear-gradient(180deg,rgb(24_15_9/.62),rgb(24_15_9/.5))] px-1 py-3.5 min-[360px]:gap-x-1 min-[360px]:px-2 stage:w-fit stage:max-w-none stage:gap-x-2 stage:rounded-[36px] stage:px-5 stage:py-5">
+		{
+			profiles.map((p) => {
+				const inner = (
+					<>
+						<Image
+							src={p.icon}
+							alt=""
+							widths={[80, 160, 240]}
+							sizes="(min-width: 901px) 92px, 56px"
+							class="size-[clamp(40px,11vw,56px)] transition-[translate,filter] duration-500 ease-out-expo group-hover:drop-shadow-[0_10px_18px_rgb(228_96_0/.35)] motion-safe:group-hover:-translate-y-0.5 stage:size-[92px]"
+						/>
+						<span
+							class="font-mono text-[clamp(9px,2.7vw,12.5px)] leading-snug tracking-[-.03em] stage:text-[12.5px] stage:tracking-normal [overflow-wrap:anywhere] text-ivory-muted transition-colors duration-300 group-hover:text-ivory"
+							data-handle={p.handle}
+							aria-live={p.copy ? 'polite' : undefined}
+						>
+							{p.handle}
+						</span>
+					</>
+				);
+				return (
+					<li class="min-w-0 flex-1 stage:w-[120px] stage:flex-none">
+						{p.href ? (
+							<a class={tile} href={p.href} target="_blank" rel="noopener" aria-label={`${p.handle.includes(p.label) ? p.handle : `${p.label}: ${p.handle}`} (opens in a new tab)`}>
+								{inner}
+							</a>
+						) : (
+							<button type="button" class={tile} data-copy={p.copy} aria-label={`${p.label}: ${p.handle} (copy username)`}>
+								{inner}
+							</button>
+						)}
+					</li>
+				);
+			})
+		}
+	</ul>
 	<div class="relative mt-20 flex justify-center gap-[22px] text-[13.5px] text-ivory-faint">
-		<span>© 2026 Suprava Dutta</span><span>Kolkata</span>
+		<span>© 2026 Suprava Dutta</span><span>India</span>
 	</div>
 </section>
+
+<script>
+	// copy-to-clipboard tiles: show "Copied" in place of the handle for a moment
+	for (const btn of document.querySelectorAll<HTMLButtonElement>('#contact [data-copy]')) {
+		const label = btn.querySelector<HTMLElement>('[data-handle]');
+		let timer = 0;
+		btn.addEventListener('click', async () => {
+			if (!label) return;
+			try {
+				await navigator.clipboard.writeText(btn.dataset.copy ?? '');
+				label.textContent = 'Copied';
+			} catch {
+				label.textContent = btn.dataset.copy ?? '';
+			}
+			clearTimeout(timer);
+			timer = window.setTimeout(() => (label.textContent = label.dataset.handle ?? ''), 1800);
+		});
+	}
+</script>

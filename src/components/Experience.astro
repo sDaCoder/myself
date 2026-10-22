@@ -2,6 +2,8 @@
 import LinkPill, { type Link } from './LinkPill.astro';
 import Slide from './Slide.astro';
 import Stack from './Stack.astro';
+import pages from '../assets/icons/pages.png';
+import safari from '../assets/icons/safari.png';
 
 interface Role {
 	when: string;
@@ -23,8 +25,8 @@ const roles: Role[] = [
 			'Architected the end-to-end design of a multi-agent conversational AI assistant for a U.S.-based client, specifying multi-agent orchestration and intent routing, with agents built on LangChain and LangGraph.',
 		stack: ['LangChain', 'LangGraph', 'RAG', 'BM25', 'Redis', 'Jira'],
 		links: [
-			{ label: 'Offer letter', icon: 'file', href: 'https://drive.google.com/file/d/1i9zXse0AQ8ZyCzLN63xl8NGdoBtRpndp/view' },
-			{ label: 'Completion certificate', icon: 'file', href: 'https://drive.google.com/file/d/1sGFCmk3e9eTHVFZ8ev960g6TlfD1Uuhf/view' },
+			{ label: 'Offer letter', icon: pages, href: 'https://drive.google.com/file/d/1i9zXse0AQ8ZyCzLN63xl8NGdoBtRpndp/view' },
+			{ label: 'Completion certificate', icon: pages, href: 'https://drive.google.com/file/d/1sGFCmk3e9eTHVFZ8ev960g6TlfD1Uuhf/view' },
 		],
 	},
 	{
@@ -34,8 +36,8 @@ const roles: Role[] = [
 		summary: "Redesigned and upgraded the society's website, and managed its ongoing maintenance.",
 		stack: ['React', 'Figma'],
 		links: [
-			{ label: 'Live website', icon: 'arrow', href: 'https://rasoriitm.vercel.app/' },
-			{ label: 'Certificate', icon: 'file', href: 'https://drive.google.com/file/d/1KMc1hyiZEPKC6MI4m-3OfpUkt9tYo9ah/view' },
+			{ label: 'Live website', icon: safari, href: 'https://rasoriitm.vercel.app/' },
+			{ label: 'Certificate', icon: pages, href: 'https://drive.google.com/file/d/1KMc1hyiZEPKC6MI4m-3OfpUkt9tYo9ah/view' },
 		],
 	},
 ];
@@ -45,7 +47,7 @@ const roles: Role[] = [
 	<div class="grid gap-[18px]">
 		{
 			roles.map((role) => (
-				<article class="reveal grid grid-cols-1 gap-1.5 border-t border-hairline py-[30px] stage:grid-cols-[210px_minmax(0,1fr)] stage:gap-7">
+				<article class="reveal -mx-5 grid grid-cols-1 gap-1.5 border-t border-hairline px-5 py-[30px] stage:mx-0 stage:px-0 stage:grid-cols-[210px_minmax(0,1fr)] stage:gap-7">
 					<div class="pt-2.5 font-mono text-sm text-marigold">{role.when}</div>
 					<div>
 						<h3 class="m-0 text-[clamp(28px,3.2vw,44px)] leading-[1.02] font-extrabold tracking-[-.03em]">{role.title}</h3>

@@ -32,11 +32,10 @@ A single engineer's own record of their AI/ML/data work, made distinct by a visu
 - **Hosting:** GitHub Pages, so the site must build as static output. There's no server rendering, no API routes and no server-side form handling. A contact form, if there is one, needs a static-friendly option such as a `mailto:` link or a third-party form endpoint.
 - **Content:** written directly into the pages and components. No content collections or CMS.
 - **Sections:** skills, experience, education, projects, contact.
-- **Actions:** download the resume PDF, links to GitHub and LinkedIn, email or contact.
+- **Actions:** download the resume PDF, links to GitHub, LinkedIn, LeetCode, Instagram and Discord, email or contact.
 - **Not decided yet:**
   - the custom domain or base path for GitHub Pages
   - whether a contact form is used at all (or just email), and which form service
-  - the correct repo for the Smart Home project
   - whether the internship was remote or onsite (the resume says both)
 
 ## Brand Commitments
@@ -52,9 +51,11 @@ A single engineer's own record of their AI/ML/data work, made distinct by a visu
 
 ### Identity and profiles
 
-- **Email:** supravadutta.nnhs.kol.e2321+portfolio@gmail.com (site address since 2026-10-22; Gmail plus-alias of the resume address)
+- **Email:** supravadutta.official23+portfolio@gmail.com (site address since 2026-10-22, set by Suprava; Gmail plus-alias, differs from the resume address)
 - **GitHub:** https://github.com/sDaCoder
 - **LinkedIn:** https://www.linkedin.com/in/suprava-dutta-sda-e23
+- **Instagram:** https://www.instagram.com/sda.e23/ (@sda.e23, public; added by Suprava 2026-10-22, not on the resume)
+- **Discord:** @sda_e2023 (username sda_e2023; added by Suprava 2026-10-22, not on the resume; no profile URL without the numeric user ID, so the site copies the username)
 - **LeetCode:** https://leetcode.com/u/sda_e23/ (350+ problems solved; updated by Suprava 2026-10-22, the resume PDF still says 300+)
 - **Phone:** it's on the resume, but **keep it off the site** unless the user asks for it.
 
@@ -90,7 +91,7 @@ A single engineer's own record of their AI/ML/data work, made distinct by a visu
 - **Smart Home Server (ESP32)**
   - An IoT web server for controlling home appliances remotely. The ESP32 acts as the Wi-Fi access point and Node.js runs the backend.
   - Uses MQTT for two-way communication and JWT authentication for API access.
-  - Repo link: the resume points to https://github.com/sDaCoder/nextjs-react-todo, which looks wrong. **Confirm before publishing.**
+  - Repo: https://github.com/sDaCoder/esp32-server (set by Suprava 2026-10-22; the resume's nextjs-react-todo link was wrong)
 
 ### Skills
 
