@@ -32,7 +32,7 @@ A single engineer's own record of their AI/ML/data work, made distinct by a visu
 - **Hosting:** GitHub Pages, so the site must build as static output. There's no server rendering, no API routes and no server-side form handling. A contact form, if there is one, needs a static-friendly option such as a `mailto:` link or a third-party form endpoint.
 - **Content:** written directly into the pages and components. No content collections or CMS.
 - **Sections:** skills, experience, education, projects, contact.
-- **Actions:** download the resume PDF, links to GitHub, LinkedIn, LeetCode, Instagram and Discord, email or contact.
+- **Actions:** open the resume PDF in a new tab, links to GitHub, LinkedIn, LeetCode, Instagram and Discord, email or contact.
 - **Not decided yet:**
   - the custom domain or base path for GitHub Pages
   - whether a contact form is used at all (or just email), and which form service

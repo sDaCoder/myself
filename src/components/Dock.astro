@@ -15,18 +15,19 @@ const sections: { id: string; label: string; icon: ImageMetadata; wideOnly?: boo
 	{ id: 'contact', label: 'Contact', icon: contact, wideOnly: true },
 ];
 
-// an app icon at the contact socials' size with its name below (min width keeps a short label like "Skills" from squeezing the icon), like the macOS dock; the icon lifts on hover and grows for the current section
+// an app icon with its name below; on desktop the icon scales with the window height (up to the contact socials' 92px)
+// so the dock leaves at least 70% of the hero portrait in view (min width keeps a short label like "Skills" from squeezing the icon), like the macOS dock; the icon lifts on hover and grows for the current section
 const tile =
-	'group flex min-w-12 flex-col items-center gap-0.5 rounded-[14px] px-1 pt-1.5 pb-1 no-underline transition-colors duration-300 ease-out-expo min-[400px]:min-w-14 min-[400px]:px-1.5 stage:min-w-[108px] stage:gap-1 stage:rounded-[22px] stage:px-2 stage:pt-3';
+	'group flex min-w-12 flex-col items-center gap-0.5 rounded-[14px] px-1 pt-1.5 pb-1 no-underline transition-colors duration-300 ease-out-expo min-[400px]:min-w-14 min-[400px]:px-1.5 stage:min-w-[76px] stage:gap-1 stage:rounded-[18px] stage:px-2 stage:pt-2';
 const icon =
-	'size-[clamp(40px,11vw,56px)] origin-bottom transition-[scale,translate] duration-300 ease-out-expo motion-safe:group-hover:-translate-y-0.5 stage:size-[92px]';
+	'size-[clamp(40px,11vw,56px)] origin-bottom transition-[scale,translate] duration-300 ease-out-expo motion-safe:group-hover:-translate-y-0.5 stage:size-[clamp(48px,calc(14vh-64px),92px)]';
 const name =
 	'text-[10px] leading-tight font-semibold whitespace-nowrap text-ivory-muted transition-colors duration-300 group-hover:text-ivory stage:text-[11.5px]';
 ---
 
 <!-- corner radius is concentric with the tiles: tile radius plus the dock's padding -->
 <nav
-	class="dock lg fixed bottom-[max(12px,env(safe-area-inset-bottom))] left-1/2 z-50 flex max-w-[calc(100%-20px)] -translate-x-1/2 items-stretch rounded-[20px] bg-[linear-gradient(180deg,rgb(24_15_9/.62),rgb(24_15_9/.5))] p-1.5 stage:bottom-[max(18px,env(safe-area-inset-bottom))] stage:max-w-none stage:gap-1 stage:rounded-[30px] stage:p-2"
+	class="dock lg fixed bottom-[max(12px,env(safe-area-inset-bottom))] left-1/2 z-50 flex max-w-[calc(100%-20px)] -translate-x-1/2 items-stretch rounded-[20px] bg-[linear-gradient(180deg,rgb(24_15_9/.62),rgb(24_15_9/.5))] p-1.5 stage:bottom-[max(18px,env(safe-area-inset-bottom))] stage:max-w-none stage:gap-1 stage:rounded-[24px] stage:p-1.5"
 	aria-label="Sections"
 >
 	{
@@ -41,7 +42,9 @@ const name =
 	<a
 		class:list={[tile, 'hover:bg-[rgb(255_244_230/.08)]']}
 		href={`${import.meta.env.BASE_URL}suprava-dutta-resume.pdf`}
-		download
+		target="_blank"
+		rel="noopener"
+		aria-label="Resume (PDF, opens in a new tab)"
 	>
 		<Image src={resume} alt="" widths={[80, 160, 240]} sizes="(min-width: 901px) 92px, 56px" class={icon} />
 		<span class:list={[name, 'text-ivory']}>Resume</span>
