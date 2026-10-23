@@ -107,7 +107,7 @@ A single engineer's own record of their AI/ML/data work, made distinct by a visu
 - Model Context Protocol, Anthropic: https://verify.skilljar.com/c/8ffyqwasvccp
 - Introduction to subagents, Anthropic: https://verify.skilljar.com/c/v7shar7cz2iv
 - AI Builders Lab, Google Cloud (via Hack2skill): https://certificate.hack2skill.com/user/aibuilderslab/2024H2S10AIBL-P003088
-- Galactic Problem Solver, NASA Space Apps Challenge 2026 (Noida): https://drive.google.com/file/d/1Rd5Rjo7jA3h6FB2ZVefDHZGVSQsZqPvy/view
+- Galactic Problem Solver, NASA Space Apps Challenge 2024 (Noida): https://drive.google.com/file/d/1Rd5Rjo7jA3h6FB2ZVefDHZGVSQsZqPvy/view
 
 ### Not supplied
 
