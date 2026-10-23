@@ -133,3 +133,44 @@
 	);
 	document.querySelectorAll('main > section[id]').forEach((s) => spy.observe(s));
 })();
+
+// ---------- the hero holds while the first scrolls bring the portrait up; once it lands it stays ----------
+(() => {
+	const img = document.querySelector<HTMLElement>('.hero-portrait');
+	const track = document.querySelector<HTMLElement>('.hero-track');
+	if (!img || !track || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+	let span = 1,
+		queued = false;
+	const measure = () => (span = track.offsetHeight - (track.firstElementChild as HTMLElement).offsetHeight || innerHeight * 1.2);
+	const paint = () => {
+		queued = false;
+		const p = Math.min(1, Math.max(0, scrollY / span));
+		track.style.setProperty('--reveal', (1 - (1 - p) ** 2).toFixed(3));
+		if (p === 1) {
+			removeEventListener('scroll', onScroll);
+			removeEventListener('resize', measure);
+		}
+	};
+	const onScroll = () => {
+		if (!queued) {
+			queued = true;
+			requestAnimationFrame(paint);
+		}
+	};
+	measure();
+	addEventListener('resize', measure);
+	addEventListener('scroll', onScroll, { passive: true });
+	paint();
+})();
+
+// ---------- the dock waits on the hero, arrives as the Projects section comes up, then stays ----------
+(() => {
+	const projects = document.getElementById('projects');
+	if (!projects) return;
+	const io = new IntersectionObserver(([e]) => {
+		if (!e.isIntersecting && e.boundingClientRect.top > 0) return;
+		document.documentElement.classList.add('dock-on');
+		io.disconnect();
+	});
+	io.observe(projects);
+})();
