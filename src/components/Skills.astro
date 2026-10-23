@@ -3,6 +3,8 @@ import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
 import anthropic from '../assets/certs/anthropic.png';
 import coursera from '../assets/certs/coursera.png';
+import google from '../assets/certs/google.png';
+import nasa from '../assets/certs/nasa.png';
 import udemy from '../assets/certs/udemy.png';
 import Slide from './Slide.astro';
 
@@ -17,6 +19,9 @@ const groups = [
 ];
 
 const certs = [
+	{ issuer: 'NASA Space Apps Challenge 2026, Noida', icon: nasa, name: 'Galactic Problem Solver', href: 'https://drive.google.com/file/d/1Rd5Rjo7jA3h6FB2ZVefDHZGVSQsZqPvy/view' },
+	{ issuer: 'Google Cloud', icon: google, name: 'AI Builders Lab', href: 'https://certificate.hack2skill.com/user/aibuilderslab/2024H2S10AIBL-P003088' },
+	{ issuer: 'Anthropic', icon: anthropic, name: 'Introduction to subagents', href: 'https://verify.skilljar.com/c/v7shar7cz2iv' },
 	{ issuer: 'Anthropic', icon: anthropic, name: 'Model Context Protocol', href: 'https://verify.skilljar.com/c/8ffyqwasvccp' },
 	{ issuer: 'Coursera', icon: coursera, name: 'Spring Boot', href: 'https://www.coursera.org/account/accomplishments/verify/YL0YG7POCOB9' },
 	{ issuer: 'Udemy', icon: udemy, name: 'Full Stack Web Development', href: 'https://www.udemy.com/certificate/UC-5150e81f-9f67-4494-8d9d-606d1579a663/' },
