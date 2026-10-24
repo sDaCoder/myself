@@ -1,46 +1,9 @@
-# Astro Starter Kit: Basics
+![Hero page of the Suprava Dutta portfolio site](public/og-image.jpg)
 
-```sh
-bun create astro@latest -- --template basics
-```
+# Suprava Dutta
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+**Software engineer.** Designs multi-agent LLM systems (orchestration, intent routing, retrieval) and the servers and boards underneath them.
 
-## 🚀 Project Structure
+**Portfolio:** [sdacoder.github.io/myself](https://sdacoder.github.io/myself/) · **Resume:** [PDF](public/suprava-dutta-resume.pdf)
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `bun install`             | Installs dependencies                            |
-| `bun dev`             | Starts local dev server at `localhost:4321`      |
-| `bun build`           | Build your production site to `./dist/`          |
-| `bun preview`         | Preview your build locally, before deploying     |
-| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `bun astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+[GitHub](https://github.com/sDaCoder) · [LinkedIn](https://www.linkedin.com/in/suprava-dutta-sda-e23) · [LeetCode](https://leetcode.com/u/sda_e23/) · [Email](mailto:supravadutta.official23+portfolio@gmail.com)
