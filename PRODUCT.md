@@ -75,7 +75,7 @@ A single engineer's own record of their AI/ML/data work, made distinct by a visu
   - Completion certificate: https://drive.google.com/file/d/1sGFCmk3e9eTHVFZ8ev960g6TlfD1Uuhf/view
 - **Web Administrator, Ramanujan Society of Research, IIT Madras** (2024).
   - Redesigned and upgraded the society's website and handled its maintenance (React JS, Figma).
-  - Live site: https://rasoriitm.vercel.app/
+  - Live site: https://rasor.iitmbs.org/
   - Certificate: https://drive.google.com/file/d/1KMc1hyiZEPKC6MI4m-3OfpUkt9tYo9ah/view
 
 ### Projects
