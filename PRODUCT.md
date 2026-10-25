@@ -92,6 +92,14 @@ A single engineer's own record of their AI/ML/data work, made distinct by a visu
   - An IoT web server for controlling home appliances remotely. The ESP32 acts as the Wi-Fi access point and Node.js runs the backend.
   - Uses MQTT for two-way communication and JWT authentication for API access.
   - Repo: https://github.com/sDaCoder/esp32-server (set by Suprava 2026-10-22; the resume's nextjs-react-todo link was wrong)
+- **3-Channel Audio Equalizer** (added by Suprava 2026-10-25, not on the resume; report https://drive.google.com/file/d/17eQLmG0jtUNECalPdGTQ2ziDRzZIwglq/view)
+  - Group project (with Ayan Halder and Rudra Das) for the IIT Madras EE3999 Electronic Systems Project, January 2026.
+  - Analog equalizer: three op-amp multiple-feedback band-pass filters (centres 385 Hz, 689.76 Hz, 1437 Hz; Q 9.44, 1.05, 9.9) recombined by an inverting summing amplifier, with a 2.5 V reference for single-supply operation.
+  - Designed and simulated in LTspice; transfer function verified in MATLAB (centre frequency, bandwidth, Q).
+- **PixelLab** (added by Suprava 2026-10-25, not on the resume; repo https://github.com/sDaCoder/filter-studio-flow, live at https://filter-studio-flow.supravadutta-nnhs-kol-e2321.workers.dev/, report https://drive.google.com/file/d/1lxzDxu1-dFIsqZHyEa3_zMvYojsQcJ2E/view, demo video https://youtu.be/njWlDf2GVbI)
+  - Individual IIT Madras BS Electronic Systems project (SP13, "Image Smoothing and Sharpening"), submitted 2026-04-20.
+  - Applies Mean, Gaussian and Laplacian filters to grayscale images to compare blurring against edge enhancement; the Gaussian gave the best noise-vs-detail trade-off.
+  - Client-side React/TypeScript app: grayscale conversion, convolution, output drawn on an HTML canvas; hosted on Cloudflare Workers.
 
 ### Skills
 
