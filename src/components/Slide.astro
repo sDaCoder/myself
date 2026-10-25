@@ -17,6 +17,6 @@ const { id, title, accent, lead } = Astro.props;
 	>
 		{title}{accent && <> <em class="text-marigold not-italic">{accent}</em></>}
 	</h2>
-	{lead && <p class="reveal -mt-6 mb-14 max-w-[34ch] text-[clamp(20px,2vw,26px)] leading-[1.35] text-ivory-muted">{lead}</p>}
+	{lead && <p class="reveal -mt-6 mb-14 stage:max-w-[34ch] text-[clamp(20px,2vw,26px)] leading-[1.35] text-ivory-muted">{lead}</p>}
 	<slot />
 </section>

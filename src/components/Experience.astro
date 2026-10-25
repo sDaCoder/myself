@@ -60,7 +60,7 @@ const roles: Role[] = [
 								role.org
 							)}
 						</p>
-						<p class="m-0 mb-[18px] max-w-[62ch] text-ivory">{role.summary}</p>
+						<p class="m-0 mb-[18px] stage:max-w-[62ch] text-ivory">{role.summary}</p>
 						<Stack items={role.stack} />
 						<div class="mt-[18px] flex flex-wrap gap-2">
 							{role.links.map((link) => <LinkPill {...link} />)}
