@@ -4,7 +4,6 @@ import github from '../assets/social/github.png';
 import safari from '../assets/icons/safari.png';
 import pdf from '../assets/icons/pdf.png';
 import youtube from '../assets/icons/youtube.png';
-import Icon from './Icon.astro';
 import Slide from './Slide.astro';
 import Stack from './Stack.astro';
 
@@ -74,178 +73,33 @@ const projects: Project[] = [
 		stack: ['Signal processing', 'Image filtering', 'Convolution', 'Spatial domain'],
 	},
 ];
-
-// two projects to a slide
-const slides = Array.from({ length: Math.ceil(projects.length / 2) }, (_, i) => projects.slice(i * 2, i * 2 + 2));
-const control =
-	'lg grid size-12 place-items-center rounded-full text-ivory transition-[background-color,opacity] duration-[250ms] ease-out-expo hover:bg-[rgb(255_244_230/.2)] disabled:pointer-events-none disabled:opacity-35';
 ---
 
 <Slide id="projects" title="Agents that" accent="do the work." lead="Five builds: two agent systems, a device server, an analog equalizer and an image-filtering lab.">
-	<!-- phones only: on the desktop stage the projects stand as one list -->
-	<div class="hidden items-center justify-between gap-4 in-[.js]:flex stage:hidden!" data-carousel-controls>
-		<div class="flex items-center gap-3">
-			<button
-				type="button"
-				class="group grid size-10 place-items-center rounded-full bg-[rgb(255_244_230/.08)] text-ivory transition-colors duration-[250ms] ease-out-expo hover:bg-[rgb(255_244_230/.18)]"
-				aria-label="Pause slideshow"
-				data-carousel-toggle
-			>
-				<Icon name="pause" class="group-data-[paused]:hidden" />
-				<Icon name="play" class="hidden group-data-[paused]:block" />
-			</button>
-			<!-- the timer line hangs below the count, so the count itself centres on the button -->
-			<div class="relative">
-				<p class="m-0 text-[15px] font-semibold text-ivory-faint" aria-live="polite" data-carousel-status>1 of {slides.length}</p>
-				<!-- fills over the wait before the next slide -->
-				<div class="absolute top-full left-0 mt-1 h-0.5 w-14 overflow-hidden rounded-full bg-hairline" aria-hidden="true">
-					<div class="h-full origin-left scale-x-0 bg-marigold" data-carousel-progress></div>
-				</div>
-			</div>
-		</div>
-		<div class="flex gap-2.5">
-			<button type="button" class={control} aria-label="Previous projects" data-carousel-prev disabled>
-				<Icon name="chevron" class="rotate-180" />
-			</button>
-			<button type="button" class={control} aria-label="Next projects" data-carousel-next>
-				<Icon name="chevron" />
-			</button>
-		</div>
-	</div>
-	<!-- the stage lights stay put behind the track (a scroller would clip them); projects slide past in front -->
 	<div class="relative">
 		<div class="pointer-events-none absolute -top-[60px] -left-[180px] -z-[1] size-[520px] rounded-full bg-saffron opacity-[.32] blur-[80px]" aria-hidden="true"></div>
 		<div class="pointer-events-none absolute top-[45%] -right-[200px] -z-[1] size-[520px] rounded-full bg-marigold opacity-[.32] blur-[80px]" aria-hidden="true"></div>
-		<!-- full-bleed track on phones: each slide is a viewport wide, so a slide never peeks in at the column edge.
-		     Carousel roles and focus are set by the script only while the carousel is in use. -->
-		<div
-			class="mt-6 ml-[calc(50%-50vw)] flex w-screen snap-x snap-mandatory items-start overflow-x-auto overflow-y-hidden overscroll-x-contain [scrollbar-width:none] focus-visible:outline-offset-[-2px] stage:m-0 stage:block stage:w-auto stage:overflow-visible [&::-webkit-scrollbar]:hidden"
-			data-carousel-track
-		>
-			{
-				slides.map((pair, i) => (
-					<div class="w-screen shrink-0 snap-start stage:w-auto" data-label={`${i + 1} of ${slides.length}`}>
-						<div class="mx-auto w-[min(1200px,100%-40px)] stage:w-auto">
-							{pair.map((project) => (
-								<article class="reveal grid grid-cols-1 items-start gap-[clamp(24px,5vw,80px)] border-t border-hairline py-11 stage:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]">
-									<div>
-										<h3 class="m-0 text-[clamp(38px,5vw,72px)] leading-[.95] font-extrabold tracking-[-.04em]">{project.name}</h3>
-										<p class="mt-3.5 mb-0 stage:max-w-[36ch] text-[clamp(18px,1.6vw,22px)] leading-[1.4] text-ivory-muted">{project.summary}</p>
-										<div class="mt-[18px] flex flex-wrap gap-2">
-											{project.links.map((link) => <LinkPill {...link} />)}
-										</div>
-									</div>
-									<div class="lg rounded-panel px-6 py-[22px]">
-										<ul class="m-0 grid list-none gap-3 p-0">
-											{project.points.map((point) => (
-												<li class="spec-dot grid grid-cols-[22px_1fr] gap-1.5 text-base leading-[1.45] text-ivory">{point}</li>
-											))}
-										</ul>
-										<Stack items={project.stack} divided />
-									</div>
-								</article>
-							))}
+		{
+			projects.map((project) => (
+				<article class="grid grid-cols-1 items-start gap-[clamp(24px,5vw,80px)] border-t border-hairline py-11 stage:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]" data-scroll-item>
+					<div data-scroll="slide">
+						<h3 class="m-0 text-[clamp(38px,5vw,72px)] leading-[.95] font-extrabold tracking-[-.04em]">{project.name}</h3>
+						<p class="mt-3.5 mb-0 stage:max-w-[36ch] text-[clamp(18px,1.6vw,22px)] leading-[1.4] text-ivory-muted">{project.summary}</p>
+						<div class="mt-[18px] flex flex-wrap gap-2">
+							{project.links.map((link) => <LinkPill {...link} />)}
 						</div>
 					</div>
-				))
-			}
-		</div>
+					<div class="lg rounded-panel px-6 py-[22px]" data-scroll="rise">
+						<ul class="m-0 grid list-none gap-3 p-0">
+							{project.points.map((point) => (
+								<li class="spec-dot grid grid-cols-[22px_1fr] gap-1.5 text-base leading-[1.45] text-ivory">{point}</li>
+							))}
+						</ul>
+						<Stack items={project.stack} divided />
+					</div>
+				</article>
+			))
+		}
 	</div>
 </Slide>
 
-<script>
-	// prev/next step one slide; the status line and button states follow the scroll, so swipes and arrow keys stay in sync
-	const track = document.querySelector<HTMLElement>('[data-carousel-track]');
-	const prev = document.querySelector<HTMLButtonElement>('[data-carousel-prev]');
-	const next = document.querySelector<HTMLButtonElement>('[data-carousel-next]');
-	const toggle = document.querySelector<HTMLButtonElement>('[data-carousel-toggle]');
-	const status = document.querySelector<HTMLElement>('[data-carousel-status]');
-	const progress = document.querySelector<HTMLElement>('[data-carousel-progress]');
-	if (track && prev && next && toggle && status && progress) {
-		const count = track.children.length;
-		const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-		// the carousel is a phone layout; at the stage breakpoint the projects are one stacked list
-		const stage = matchMedia('(min-width: 901px)');
-		const current = () => Math.round(track.scrollLeft / track.clientWidth);
-		const go = (step: number) =>
-			track.scrollTo({ left: (current() + step) * track.clientWidth, behavior: reduced.matches ? 'auto' : 'smooth' });
-		let frame = 0;
-		const sync = () => {
-			const i = current();
-			prev.disabled = i <= 0;
-			next.disabled = i >= count - 1;
-			status.textContent = `${i + 1} of ${count}`;
-		};
-		track.addEventListener('scroll', () => {
-			cancelAnimationFrame(frame);
-			frame = requestAnimationFrame(sync);
-		});
-		sync();
-
-		// Autoplay: a short beat after Projects reaches mid-screen, then a slide every few seconds, wrapping to the first.
-		// Focus or leaving the screen pause it; taking the carousel in hand (swipe, click, arrow keys) stops it for good.
-		const FIRST = 2000;
-		const EVERY = 5000;
-		let stopped = reduced.matches;
-		let inView = false;
-		let focused = false;
-		let timer = 0;
-		let fill: Animation | undefined;
-		const halt = () => {
-			clearTimeout(timer);
-			fill?.cancel();
-		};
-		const schedule = (wait: number) => {
-			halt();
-			if (stopped || stage.matches || !inView || focused || document.hidden) return;
-			if (!reduced.matches) {
-				fill = progress.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: wait, easing: 'linear', fill: 'forwards' });
-			}
-			timer = window.setTimeout(() => {
-				go(current() >= count - 1 ? -current() : 1);
-				schedule(EVERY);
-			}, wait);
-		};
-		const setStopped = (value: boolean) => {
-			stopped = value;
-			toggle.toggleAttribute('data-paused', value);
-			toggle.setAttribute('aria-label', value ? 'Play slideshow' : 'Pause slideshow');
-			value ? halt() : schedule(FIRST);
-		};
-		setStopped(stopped);
-
-		new IntersectionObserver(
-			([entry]) => {
-				inView = entry.isIntersecting;
-				schedule(FIRST);
-			},
-			{ rootMargin: '-35% 0px -35% 0px' },
-		).observe(track);
-
-		toggle.addEventListener('click', () => setStopped(!stopped));
-		prev.addEventListener('click', () => (setStopped(true), go(-1)));
-		next.addEventListener('click', () => (setStopped(true), go(1)));
-		track.addEventListener('pointerdown', () => setStopped(true));
-		track.addEventListener('keydown', (e) => e.key.startsWith('Arrow') && setStopped(true));
-		track.addEventListener('wheel', (e) => Math.abs(e.deltaX) > Math.abs(e.deltaY) && setStopped(true), { passive: true });
-		const setFocused = (value: boolean) => () => ((focused = value), schedule(FIRST));
-		track.addEventListener('focusin', setFocused(true));
-		track.addEventListener('focusout', setFocused(false));
-		document.addEventListener('visibilitychange', () => schedule(FIRST));
-
-		const mode = () => {
-			const on = !stage.matches;
-			const attrs: [Element, Record<string, string>][] = [
-				[track, { role: 'region', 'aria-roledescription': 'carousel', 'aria-label': 'Projects', tabindex: '0' }],
-				...[...track.children].map((slide): [Element, Record<string, string>] => [
-					slide,
-					{ role: 'group', 'aria-roledescription': 'slide', 'aria-label': (slide as HTMLElement).dataset.label ?? '' },
-				]),
-			];
-			for (const [el, set] of attrs) for (const [k, v] of Object.entries(set)) on ? el.setAttribute(k, v) : el.removeAttribute(k);
-			schedule(FIRST);
-		};
-		stage.addEventListener('change', mode);
-		mode();
-	}
-</script>

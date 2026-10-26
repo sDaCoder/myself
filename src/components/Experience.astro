@@ -47,9 +47,9 @@ const roles: Role[] = [
 	<div class="grid gap-[18px]">
 		{
 			roles.map((role) => (
-				<article class="reveal -mx-5 grid grid-cols-1 gap-1.5 border-t border-hairline px-5 py-[30px] stage:mx-0 stage:px-0 stage:grid-cols-[210px_minmax(0,1fr)] stage:gap-7">
-					<div class="pt-2.5 font-mono text-sm text-marigold">{role.when}</div>
-					<div>
+				<article class="-mx-5 grid grid-cols-1 gap-1.5 border-t border-hairline px-5 py-[30px] stage:mx-0 stage:px-0 stage:grid-cols-[210px_minmax(0,1fr)] stage:gap-7" data-scroll-item>
+					<div class="pt-2.5 font-mono text-sm text-marigold" data-scroll="slide">{role.when}</div>
+					<div data-scroll="rise">
 						<h3 class="m-0 text-[clamp(28px,3.2vw,44px)] leading-[1.02] font-extrabold tracking-[-.03em]">{role.title}</h3>
 						<p class="mt-2 mb-3.5 font-medium text-ivory-muted">
 							{role.orgHref ? (
