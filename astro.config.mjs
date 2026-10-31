@@ -5,8 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://sdacoder.github.io',
-  base: '/myself/',
+  site: 'https://supravadutta23.me',
   fonts: [
     {
       provider: fontProviders.fontsource(),
