@@ -43,9 +43,9 @@
 	};
 	let n = 0;
 	const apply = (el: HTMLElement) => {
-		const b = el.getBoundingClientRect();
-		const w = Math.round(b.width),
-			h = Math.round(b.height);
+		// layout size, not the bounding rect: scroll entrances scale these surfaces, and the filter must fit the untransformed box
+		const w = el.offsetWidth,
+			h = el.offsetHeight;
 		if (w < 20 || h < 20) return;
 		const r = Math.min(parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0, h / 2, w / 2);
 		const id = el.dataset.lgId || (el.dataset.lgId = 'lg' + n++);
