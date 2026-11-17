@@ -73,7 +73,7 @@ A single engineer's own record of their AI/ML/data work, made distinct by a visu
   - Built with LangChain, LangGraph, RAG, BM25, Redis and Jira.
   - Offer letter: https://drive.google.com/file/d/1i9zXse0AQ8ZyCzLN63xl8NGdoBtRpndp/view
   - Completion certificate: https://drive.google.com/file/d/1sGFCmk3e9eTHVFZ8ev960g6TlfD1Uuhf/view
-- **Web Administrator, Ramanujan Society of Research, IIT Madras** (2024).
+- **Web Administrator, Ramanujan Society of Research, IIT Madras** (Sept 2024–July 2026).
   - Redesigned and upgraded the society's website and handled its maintenance (React JS, Figma).
   - Live site: https://rasor.iitmbs.org/
   - Certificate: https://drive.google.com/file/d/1KMc1hyiZEPKC6MI4m-3OfpUkt9tYo9ah/view
