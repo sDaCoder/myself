@@ -56,7 +56,7 @@ A single engineer's own record of their AI/ML/data work, made distinct by a visu
 - **LinkedIn:** https://www.linkedin.com/in/suprava-dutta-sda-e23
 - **Instagram:** https://www.instagram.com/sda.e23/ (@sda.e23, public; added by Suprava 2026-10-22, not on the resume)
 - **Discord:** @sda_e2023 (username sda_e2023; added by Suprava 2026-10-22, not on the resume; no profile URL without the numeric user ID, so the site copies the username)
-- **LeetCode:** https://leetcode.com/u/sda_e23/ (350+ problems solved; updated by Suprava 2026-10-22, the resume PDF still says 300+)
+- **LeetCode:** https://leetcode.com/u/sda_e23/ (profile link only; Suprava asked on 2026-11-18 not to show the solved-problem count anywhere on the site)
 - **Phone:** it's on the resume, but **keep it off the site** unless the user asks for it.
 
 ### Education
